@@ -1,1 +1,1 @@
-A simple pearson r combiner.
+A simple pearson r combiner made by me.
