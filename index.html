@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pearson r Skor Birleştirici</title>
+    <!-- YENİ: SEO ve Favicon Eklendi -->
+    <meta name="description" content="Pearson r korelasyon katsayılarını Fisher'ın Z dönüşümü metoduyla birleştirerek tek bir ağırlıklı ortalama hesaplayın.">
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/1d4ed8/ffffff?text=rZ">
+
     <!-- Tailwind CSS Yükleniyor -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -107,6 +111,12 @@
                     Birleştirilmiş r'yi Hesapla
                 </button>
 
+                <!-- Temizle Butonu -->
+                <button onclick="clearAllData()"
+                        class="w-full mt-2 bg-red-500 text-white font-semibold py-2.5 rounded-lg hover:bg-red-600 transition duration-200 focus:outline-none focus:ring-4 focus:ring-red-300 focus:ring-opacity-50">
+                    Tüm Verileri Temizle
+                </button>
+
                 <!-- Sonuç Ekranı -->
                 <div id="results_area" class="mt-6 p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 hidden">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Hesaplama Sonuçları</h3>
@@ -132,9 +142,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Metot Bölümü Tamamen Silindi -->
     </div>
     
-    <!-- Alt Bilgi (FOOTER) - EFEKT GÜNCELLENDİ -->
+    <!-- Alt Bilgi (FOOTER) - EFEKT KORUNDU -->
     <footer class="mt-8 text-center text-gray-800 text-base font-bold italic flex flex-col items-center">
         <span class="footer-signature">⚡ Made by Anıl Sarıalai ⚡</span> 
         <span class="text-sm font-normal not-italic mt-1">
@@ -276,6 +288,29 @@
                 resultsArea.classList.add('hidden');
             }
         }
+
+        /**
+         * Bütün verileri ve sonuçları temizler.
+         */
+        function clearAllData() {
+            // Veri dizisini temizle
+            correlationData = [];
+            
+            // UI'ı varsayılan duruma sıfırla
+            renderDataList();
+            
+            // Giriş alanlarını temizle
+            titleInput.value = '';
+            rScoreInput.value = '';
+            nSizeInput.value = '';
+            
+            // Sonuç alanını gizle
+            resultsArea.classList.add('hidden');
+            
+            // Genel mesaj
+            showMessage('Tüm veriler temizlendi. Yeni bir hesaplamaya başlayabilirsiniz.', 'bg-yellow-100 text-yellow-700');
+        }
+
 
         /**
          * Kullanıcıya geçici bir mesaj gösterir.
