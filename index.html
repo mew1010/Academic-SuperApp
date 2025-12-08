@@ -3,771 +3,758 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pearson r Combiner</title>
-    <meta name="description" content="Pearson r korelasyon katsayılarını Fisher'ın Z dönüşümü metoduyla birleştirerek tek bir ağırlıklı ortalama hesaplayın.">
-    <link rel="icon" type="image/png" href="https://placehold.co/32x32/1d4ed8/ffffff?text=🔗">
+    <title>Academic SuperApp</title>
+    <meta name="description" content="Akademik çalışmalar için hesaplama araçları.">
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/1d4ed8/ffffff?text=A">
 
     <!-- Tailwind CSS Yükleniyor -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f9fb;
+            background-color: #f3f4f6; /* bg-gray-100 */
         }
-        .card {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 5px 10px -5px rgba(0, 0, 0, 0.04);
+        /* Özel stiller */
+        .symbol { font-weight: 700; color: #1e40af; }
+        
+        .footer-signature { cursor: pointer; transition: all 0.3s ease; }
+        .footer-signature:hover { color: #3b82f6; text-shadow: 0 0 10px #bfdbfe; }
+        
+        .btn-lock-default { background-color: #10b981; }
+        .btn-lock-default:hover { background-color: #059669; }
+        
+        .icon-link { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: 0 5px; transition: opacity 0.2s; }
+        .icon-link:hover { opacity: 0.7; }
+
+        /* Sidebar Aktif Link Stili */
+        .nav-item.active {
+            background-color: #374151; /* gray-700 */
+            border-left: 4px solid #6366f1; /* indigo-500 */
+            color: #ffffff;
         }
-        .symbol {
+        .nav-item {
+            border-left: 4px solid transparent;
+        }
+        
+        /* Kategori Başlıkları */
+        .nav-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #9ca3af; /* gray-400 */
+            padding: 1rem 1.5rem 0.5rem 1.5rem;
             font-weight: 700;
-            color: #1e40af; 
+            letter-spacing: 0.05em;
         }
-        .footer-signature {
-            cursor: pointer;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-        .footer-signature:hover {
-            color: #3b82f6; 
-            text-shadow: 0 0 10px #bfdbfe, 
-                         0 0 20px #3b82f6; 
-        }
-        .footer-signature:active {
-            color: #1d4ed8; 
-        }
-        .main-content-grid {
+
+        /* Responsive Grid ayarları */
+        .pearson-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
         }
         @media (min-width: 1024px) {
-            .main-content-grid {
+            .pearson-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
-        .btn-lock-default {
-            background-color: #10b981; 
-        }
-        .btn-lock-default:hover {
-            background-color: #059669; 
-        }
-        .icon-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            margin: 0 5px; 
-            transition: opacity 0.2s;
-        }
-        .icon-link:hover {
-            opacity: 0.7;
-        }
-        /* Paylaşım alanı animasyonu */
-        .share-container {
-            transition: all 0.3s ease-out;
-        }
     </style>
 </head>
-<body class="p-4 sm:p-8 min-h-screen flex items-center justify-center flex-col">
+<body class="h-screen flex flex-col md:flex-row overflow-hidden">
 
-    <div class="w-full max-w-4xl">
-        <!-- DİL SEÇİM BUTONLARI -->
-        <div class="flex justify-end space-x-2 mb-4">
-            <button onclick="setLanguage('tr')" id="lang-tr" class="text-sm font-semibold px-3 py-1 rounded-full border border-indigo-600 text-white bg-indigo-600">TR</button>
-            <button onclick="setLanguage('en')" id="lang-en" class="text-sm font-semibold px-3 py-1 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100">EN</button>
+    <!-- SOL SIDEBAR (MENÜ) -->
+    <aside class="w-full md:w-64 bg-gray-900 text-gray-300 flex-shrink-0 flex flex-col shadow-xl z-20">
+        <!-- App Logo / Başlık -->
+        <div class="p-6 bg-gray-800 flex items-center justify-center border-b border-gray-700">
+            <h1 class="text-xl font-bold text-white tracking-wide flex items-center gap-2">
+                <span class="text-2xl">🎓</span> 
+                <span data-tr="Akademik SuperApp" data-en="Academic SuperApp">Akademik SuperApp</span>
+            </h1>
         </div>
+
+        <!-- Menü Linkleri -->
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                
+                <!-- Kategori: Analiz -->
+                <li class="nav-category" data-tr="Veri Analizi" data-en="Data Analysis">Veri Analizi</li>
+                <li>
+                    <button onclick="switchView('pearson')" id="nav-pearson" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3 active">
+                        <span>🔗</span>
+                        <span data-tr="Pearson r Birleştirici" data-en="Pearson r Combiner">Pearson r Birleştirici</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('effect-size')" id="nav-effect-size" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>📊</span>
+                        <span data-tr="Etki Büyüklüğü" data-en="Effect Size Calculator">Etki Büyüklüğü</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('sample-size')" id="nav-sample-size" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>👥</span>
+                        <span data-tr="Örneklem Hesaplayıcı" data-en="Sample Size Calculator">Örneklem Hesaplayıcı</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('normality')" id="nav-normality" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🔔</span>
+                        <span data-tr="Normallik Testi" data-en="Normality Test">Normallik Testi</span>
+                    </button>
+                </li>
+
+                <!-- Kategori: Yazım ve Referans -->
+                <li class="nav-category" data-tr="Yazım & Referans" data-en="Writing & Reference">Yazım & Referans</li>
+                <li>
+                    <button onclick="switchView('apa-generator')" id="nav-apa-generator" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>📝</span>
+                        <span data-tr="APA 7 Oluşturucu" data-en="APA 7 Generator">APA 7 Oluşturucu</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('abstract-checker')" id="nav-abstract-checker" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🔡</span>
+                        <span data-tr="Özet Kontrolü" data-en="Abstract Checker">Özet Kontrolü</span>
+                    </button>
+                </li>
+
+                <!-- Kategori: Araştırma Süreci -->
+                <li class="nav-category" data-tr="Araştırma Süreci" data-en="Research Process">Araştırma Süreci</li>
+                <li>
+                    <button onclick="switchView('prisma')" id="nav-prisma" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>📉</span>
+                        <span data-tr="PRISMA Sayacı" data-en="PRISMA Counter">PRISMA Sayacı</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('pico')" id="nav-pico" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🧩</span>
+                        <span data-tr="PICO Oluşturucu" data-en="PICO Generator">PICO Oluşturucu</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('randomizer')" id="nav-randomizer" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🎲</span>
+                        <span data-tr="Rastgele Atama" data-en="Randomizer">Rastgele Atama</span>
+                    </button>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer (GÜNCELLENDİ: Daha Sade ve v1.0) -->
+        <div class="p-3 bg-gray-800 border-t border-gray-700 text-center flex flex-col items-center gap-0.5">
+            <div class="text-[9px] text-gray-500 font-mono tracking-widest mb-0.5">v1.0 SuperApp</div>
+            
+            <div class="footer-signature text-gray-300 text-[10px] font-bold">Made by Anıl Sarıalai ⚡</div>
+            
+            <div class="flex justify-center items-center gap-2 mt-0.5">
+                <!-- GMAIL LOGOSU -->
+                <a href="mailto:anilsarialai@gmail.com" class="icon-link text-gray-400 hover:text-white transition-colors" title="E-posta Gönder">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
+                        <path d="M1.5 8.75c0-.966.784-1.75 1.75-1.75h17c.966 0 1.75.784 1.75 1.75v6.5c0 .966-.784 1.75-1.75 1.75h-17c-.966 0-1.75-.784-1.75-1.75v-6.5zm1.75-.25a.25.25 0 0 0-.25.25v6.5c0 .138.112.25.25.25h17a.25.25 0 0 0 .25-.25v-6.5a.25.25 0 0 0-.25-.25h-17zm1.196.486l6.63 4.972a.75.75 0 0 0 .948 0l6.63-4.972c.162-.121.378-.063.447.135.069.198-.01.424-.172.545l-6.72 5.04a2.25 2.25 0 0 1-2.822 0l-6.72-5.04c-.162-.121-.241-.347-.172-.545.069-.198.285-.256.447-.135z"/>
+                    </svg>
+                </a>
+                
+                <!-- GITHUB LOGOSU -->
+                <a href="https://github.com/mew1010/Pearson-r-Combiner" target="_blank" rel="noopener noreferrer" class="icon-link text-gray-400 hover:text-white transition-colors" title="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.199 6.836 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.704-2.782.605-3.37-.271-3.37-.271-.454-1.155-1.107-1.465-1.107-1.465-.905-.62.068-.608.068-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.918.831.092-.647.35-1.087.636-1.334-2.22-.253-4.555-1.11-4.555-4.943 0-1.092.39-1.983 1.03-2.675-.104-.252-.445-1.266.098-2.651 0 0 .84-.272 2.75 1.025.795-.22 1.635-.33 2.47-.33.835 0 1.675.11 2.47.33 1.91-1.297 2.75-1.025 2.75-1.025.543 1.385.202 2.399.098 2.651.64.692 1.03 1.583 1.03 2.675 0 3.843-2.335 4.687-4.567 4.935.359.309.678.922.678 1.867 0 1.334-.012 2.41-.012 2.723 0 .268.18.58.688.482C19.136 20.198 22 16.419 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- SAĞ ANA İÇERİK ALANI -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 relative">
         
-        <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2" data-tr="🔗 Pearson r Birleştirici" data-en="🔗 Pearson r Combiner">🔗 Pearson r Birleştirici</h1>
-            <p class="text-gray-500" data-tr="Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı." data-en="Weighted average correlation calculation tool using Fisher's Z-Transformation.">Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.</p>
+        <!-- Üst Bar (Dil Seçimi) -->
+        <header class="bg-white shadow-sm px-6 py-3 flex justify-end items-center z-10 shrink-0">
+            <div class="flex space-x-2">
+                <button onclick="setLanguage('tr')" id="lang-tr" class="text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors">TR</button>
+                <button onclick="setLanguage('en')" id="lang-en" class="text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors">EN</button>
+            </div>
         </header>
 
-        <!-- ANA KART -->
-        <div class="bg-white card rounded-xl p-6 sm:p-10 main-content-grid">
-            
-            <!-- SOL SÜTUN: Veri Giriş Alanı -->
-            <div>
-                <h2 class="text-xl font-bold text-indigo-600 mb-4 border-b pb-2" data-tr="Alt Boyut ve r Katsayısı" data-en="Subscale and r Coefficient">Alt Boyut ve r Katsayısı</h2>
-                
-                <div class="space-y-4"> 
-                    
-                    <!-- Alt Boyut Adı Girişi -->
-                    <div>
-                        <label for="entry_title" class="block text-sm font-medium text-gray-700 mb-1" data-tr="Alt Boyut Adı (Örn: Planlama, İzleme, Değerlendirme):" data-en="Subscale Name (Ex: Planning, Monitoring, Evaluation):">Alt Boyut Adı (Örn: Planlama, İzleme, Değerlendirme):</label>
-                        <input type="text" id="entry_title" data-tr-placeholder="Alt boyut adı" data-en-placeholder="Subscale name" placeholder="Alt boyut adı"
-                               onkeydown="handleKeydown(event)"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
-                        <p id="title_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Lütfen alt boyutun adını girin." data-en="Please enter the name of the subscale.">Lütfen alt boyutun adını girin.</p>
+        <!-- Scrollable İçerik Alanı -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 scroll-smooth">
+            <div class="max-w-5xl mx-auto">
+
+                <!-- 1. VIEW: PEARSON R COMBINER (MEVCUT) -->
+                <div id="view-pearson" class="view-section">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Pearson r Birleştirici" data-en="Pearson r Combiner">Pearson r Birleştirici</h2>
+                        <p class="text-gray-500" data-tr="Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı." data-en="Weighted average correlation calculation tool using Fisher's Z-Transformation.">Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.</p>
                     </div>
 
-                    <!-- r Katsayısı Girişi -->
-                    <div>
-                        <label for="r_score" class="block text-sm font-medium text-gray-700 mb-1" data-tr="Korelasyon Katsayısı (r):" data-en="Correlation Coefficient (r):">Korelasyon Katsayısı (<span class="symbol">r</span>):</label>
-                        <input type="text" id="r_score" data-tr-placeholder="-1.0 ile 1.0 arasında" data-en-placeholder="Between -1.0 and 1.0"
-                               value="0." 
-                               onkeydown="handleKeydown(event)"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
-                        <p id="r_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Lütfen -1 ile 1 arasında geçerli bir r değeri girin." data-en="Please enter a valid r value between -1 and 1.">Lütfen -1 ile 1 arasında geçerli bir <span class="symbol">r</span> değeri girin.</p>
-                    </div>
-
-                    <!-- n Örneklem Büyüklüğü Girişi -->
-                    <div>
-                        <label for="n_size" class="block text-sm font-medium text-gray-700 mb-1" data-tr="Örneklem Büyüklüğü (n):" data-en="Sample Size (n):">Örneklem Büyüklüğü (<span class="symbol">n</span>):</label>
-                        <div class="flex space-x-2">
-                            <input type="number" id="n_size" data-tr-placeholder="Minimum 3 olmalıdır" data-en-placeholder="Minimum 3 is required" placeholder="Minimum 3 olmalıdır" step="1" min="3"
-                                   onkeydown="handleKeydown(event)"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
-                            <button onclick="toggleNLock()" id="n_lock_button"
-                                    class="flex-shrink-0 text-white font-semibold px-3 py-2 rounded-lg transition duration-150 text-sm btn-lock-default" data-tr="Sabitle" data-en="Lock">
-                                Sabitle
-                            </button>
+                    <div class="bg-white card rounded-xl p-6 sm:p-10 pearson-grid">
+                        <!-- SOL: GİRİŞ -->
+                        <div>
+                            <h3 class="text-lg font-bold text-indigo-600 mb-4 border-b pb-2" data-tr="Alt Boyut ve r Katsayısı" data-en="Subscale and r Coefficient">Alt Boyut ve r Katsayısı</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Alt Boyut Adı:" data-en="Subscale Name:">Alt Boyut Adı:</label>
+                                    <input type="text" id="entry_title" data-tr-placeholder="Alt boyut adı" data-en-placeholder="Subscale name" placeholder="Alt boyut adı" onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                                    <p id="title_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Lütfen alt boyutun adını girin." data-en="Please enter the name of the subscale.">Lütfen alt boyutun adını girin.</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Korelasyon Katsayısı (r):" data-en="Correlation Coefficient (r):">Korelasyon Katsayısı (<span class="symbol">r</span>):</label>
+                                    <input type="text" id="r_score" data-tr-placeholder="-1.0 ile 1.0 arasında" data-en-placeholder="Between -1.0 and 1.0" value="0." onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                                    <p id="r_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Geçersiz r değeri." data-en="Invalid r value.">Geçersiz r değeri.</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Örneklem Büyüklüğü (n):" data-en="Sample Size (n):">Örneklem Büyüklüğü (<span class="symbol">n</span>):</label>
+                                    <div class="flex space-x-2">
+                                        <input type="number" id="n_size" data-tr-placeholder="Min 3" data-en-placeholder="Min 3" placeholder="Min 3" step="1" min="3" onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                                        <button onclick="toggleNLock()" id="n_lock_button" class="flex-shrink-0 text-white font-semibold px-3 py-2 rounded-lg transition duration-150 text-sm btn-lock-default" data-tr="Sabitle" data-en="Lock">Sabitle</button>
+                                    </div>
+                                    <p id="n_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Geçersiz n değeri." data-en="Invalid n value.">Geçersiz n değeri.</p>
+                                </div>
+                                <button onclick="addEntry()" class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50" data-tr="Alt Boyutu Ekle" data-en="Add Subscale">Alt Boyutu Ekle</button>
+                                <div id="message_area" class="text-sm text-center py-2 rounded-lg hidden"></div>
+                            </div>
                         </div>
-                        <p id="n_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Lütfen 3 veya daha büyük bir n değeri girin." data-en="Please enter an n value of 3 or greater.">Lütfen 3 veya daha büyük bir <span class="symbol">n</span> değeri girin.</p>
-                    </div>
 
-                    <!-- Ekle Butonu -->
-                    <button onclick="addEntry()"
-                            class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50" data-tr="Alt Boyutu Ekle" data-en="Add Subscale">
-                        Alt Boyutu Ekle
-                    </button>
-                    
-                    <!-- Genel Mesaj Alanı -->
-                    <div id="message_area" class="text-sm text-center py-2 rounded-lg hidden"></div>
-                </div>
-            </div>
+                        <!-- SAĞ: LİSTE VE SONUÇ -->
+                        <div class="flex flex-col h-full">
+                            <h3 class="text-lg font-bold text-green-600 mb-4 border-b pb-2" data-tr="Girilen Veriler ve Sonuç" data-en="Entries and Result">Girilen Veriler ve Sonuç</h3>
+                            
+                            <div id="data_list" class="flex-1 min-h-[150px] max-h-[300px] overflow-y-auto mb-4 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                                <p id="placeholder_text" class="text-gray-400 italic text-sm text-center py-8" data-tr="Liste boş." data-en="List is empty.">Liste boş.</p>
+                            </div>
 
-            <!-- SAĞ SÜTUN: Mevcut Korelasyonlar ve Sonuçlar -->
-            <div class="bg-white p-0">
-                
-                <h2 class="text-xl font-bold text-green-600 mb-4 border-b pb-2" data-tr="Girilen Korelasyonlar ve Sonuç" data-en="Inputted Correlations and Result">Girilen Korelasyonlar ve Sonuç</h2>
-                
-                <!-- Veri Listesi -->
-                <div id="data_list" class="space-y-2 max-h-48 overflow-y-auto mb-6 p-2 bg-gray-50 rounded-lg border">
-                    <p id="placeholder_text" class="text-gray-400 italic text-sm text-center py-4" data-tr="Henüz alt boyut korelasyonu eklenmedi." data-en="No subscale correlation has been added yet.">Henüz alt boyut korelasyonu eklenmedi.</p>
-                </div>
+                            <div class="space-y-3 mt-auto">
+                                <button onclick="calculateCombinedR()" class="w-full bg-green-600 text-white font-semibold py-2.5 rounded-lg hover:bg-green-700 transition duration-200 focus:outline-none disabled:bg-gray-400" id="calculate_button" disabled data-tr="Birleştirilmiş r'yi Hesapla" data-en="Calculate Combined r">Birleştirilmiş r'yi Hesapla</button>
+                                <button onclick="clearAllData()" class="w-full bg-red-500 text-white font-semibold py-2.5 rounded-lg hover:bg-red-600 transition duration-200 focus:outline-none" data-tr="Temizle" data-en="Clear">Temizle</button>
+                            </div>
 
-                <!-- Hesapla Butonu -->
-                <button onclick="calculateCombinedR()"
-                        class="w-full bg-green-600 text-white font-semibold py-2.5 rounded-lg hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 disabled:bg-gray-400"
-                        id="calculate_button" disabled data-tr="Birleştirilmiş r'yi Hesapla" data-en="Calculate Combined r">
-                    Birleştirilmiş r'yi Hesapla
-                </button>
-
-                <!-- Temizle Butonu -->
-                <button onclick="clearAllData()"
-                        class="w-full mt-2 bg-red-500 text-white font-semibold py-2.5 rounded-lg hover:bg-red-600 transition duration-200 focus:outline-none focus:ring-4 focus:ring-red-300 focus:ring-opacity-50" data-tr="Tüm Verileri Temizle" data-en="Clear All Data">
-                    Tüm Verileri Temizle
-                </button>
-
-                <!-- Sonuç Ekranı -->
-                <div id="results_area" class="mt-6 p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 hidden">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3" data-tr="Hesaplama Sonuçları" data-en="Calculation Results">Hesaplama Sonuçları</h3>
-                    <div class="space-y-2">
-                        <!-- Birleştirilmiş r skoru ve Kopyala butonu -->
-                        <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-indigo-200">
-                            <p class="text-base text-gray-700">
-                                <span class="font-medium text-indigo-700" data-tr="Birleştirilmiş Pearson r:" data-en="Combined Pearson r:">Birleştirilmiş Pearson <span class="symbol">r</span>:</span> 
-                                <span id="combined_r" class="font-bold text-xl ml-2 text-indigo-900"></span>
-                            </p>
-                            <button onclick="copyResult()" id="copy_button"
-                                    class="bg-indigo-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-indigo-600 transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-400" data-tr="Kopyala" data-en="Copy">
-                                Kopyala
-                            </button>
+                            <!-- SONUÇ ALANI -->
+                            <div id="results_area" class="mt-6 p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 hidden">
+                                <h4 class="text-md font-semibold text-gray-800 mb-2" data-tr="Sonuç" data-en="Result">Sonuç</h4>
+                                <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-indigo-200 shadow-sm">
+                                    <p class="text-base text-gray-700 font-medium">
+                                        <span data-tr="Birleşik r:" data-en="Combined r:">Birleşik r:</span> 
+                                        <span id="combined_r" class="font-extrabold text-xl ml-2 text-indigo-700"></span>
+                                    </p>
+                                    <button onclick="copyResult()" class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1 rounded text-sm hover:bg-indigo-100 transition" data-tr="Kopyala" data-en="Copy">Kopyala</button>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2"><span data-tr="Ortalama Z:" data-en="Avg Z:">Ortalama Z:</span> <span id="avg_z" class="font-mono"></span></p>
+                                <div id="copy_message_area" class="text-xs text-center py-1 rounded mt-1 hidden bg-green-100 text-green-800"></div>
+                            </div>
                         </div>
-                        
-                        <p class="text-sm text-gray-600"><span class="font-medium" data-tr="Ortalama Fisher Z (Z̄):" data-en="Average Fisher Z (Z̄):">Ortalama Fisher <span class="symbol">Z</span> (<span class="symbol">Z̄</span>):</span> <span id="avg_z" class="ml-2"></span></p>
-                        <p class="text-xs text-gray-500 italic" data-tr="Not: Bu hesaplama, her bir alt boyut korelasyonunun örneklem büyüklüğü (n) ile ağırlıklandırıldığı Fisher'ın Z dönüşümüne dayanır." data-en="Note: This calculation is based on Fisher's Z-transformation, where each subscale correlation is weighted by its sample size (n).">Not: Bu hesaplama, her bir alt boyut korelasyonunun örneklem büyüklüğü (<span class="symbol">n</span>) ile ağırlıklandırıldığı Fisher'ın <span class="symbol">Z</span> dönüşümüne dayanır.</p>
-                        
-                        <!-- Kopyalama geri bildirimi için mesaj alanı -->
-                        <div id="copy_message_area" class="text-sm text-center py-1 rounded-lg hidden"></div>
+                    </div>
+
+                    <!-- GEÇMİŞ -->
+                    <div class="bg-white card rounded-xl p-6 mt-8">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="text-lg font-bold text-gray-800" data-tr="Geçmiş Kayıtlar" data-en="History">Geçmiş Kayıtlar</h3>
+                            <button onclick="clearHistory()" id="clear_history_button" class="text-xs text-red-500 hover:text-red-700 font-medium hidden" data-tr="Geçmişi Sil" data-en="Clear History">Geçmişi Sil</button>
+                        </div>
+                        <div id="history_list" class="space-y-3"></div>
                     </div>
                 </div>
+                <!-- 1. VIEW SONU -->
+
+                <!-- PLACEHOLDER VIEWS FOR NEW TOOLS -->
+                <div id="view-effect-size" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">📊</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Etki Büyüklüğü</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-sample-size" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">👥</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Örneklem Hesaplayıcı</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-normality" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🔔</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Normallik Testi</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-apa-generator" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">📝</div><h2 class="text-2xl font-bold text-gray-800 mb-2">APA 7 Oluşturucu</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-abstract-checker" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🔡</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Özet Kontrolü</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-prisma" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">📉</div><h2 class="text-2xl font-bold text-gray-800 mb-2">PRISMA Sayacı</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-pico" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🧩</div><h2 class="text-2xl font-bold text-gray-800 mb-2">PICO Oluşturucu</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+                <div id="view-randomizer" class="view-section hidden">
+                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🎲</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Rastgele Atama</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                </div>
+
+
+                <!-- FOOTER SİLİNDİ (Çünkü Sidebar'a Taşındı) -->
+
             </div>
         </div>
-
-        <!-- GEÇMİŞ BİRLEŞTİRMELER -->
-        <div class="bg-white card rounded-xl p-6 sm:p-10 mt-8">
-            <div class="flex justify-between items-center mb-4 border-b pb-2">
-                <h2 class="text-xl font-bold text-gray-800" data-tr="Geçmiş Birleştirmeler (Son 10 Kayıt)" data-en="Past Combinations (Last 10 Records)">Geçmiş Birleştirmeler (Son 10 Kayıt)</h2>
-                <button onclick="clearHistory()" id="clear_history_button"
-                        class="text-xs text-red-500 hover:text-red-700 font-semibold hidden disabled:text-gray-400 transition duration-150" data-tr="Geçmişi Temizle" data-en="Clear History">
-                    Geçmişi Temizle
-                </button>
-            </div>
-            
-            <div id="history_list" class="space-y-3">
-                <!-- Kayıtlar buraya yüklenecek -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- FOOTER -->
-    <footer class="mt-8 text-center text-gray-800 text-base font-bold italic flex flex-col items-center">
-        <span class="footer-signature">⚡ Made by Anıl Sarıalai ⚡</span> 
-        <span class="text-sm font-normal not-italic mt-1 flex items-center">
-            
-            <!-- GMAIL LOGOSU -->
-            <a href="mailto:anilsarialai@gmail.com" class="icon-link" title="E-posta Gönder (anilsarialai@gmail.com)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-600 hover:text-black">
-                    <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
-                    <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
-                </svg>
-            </a>
-            
-            <!-- GITHUB LOGOSU -->
-            <a href="https://github.com/mew1010/Pearson-r-Combiner" target="_blank" rel="noopener noreferrer" class="icon-link" title="GitHub Deposu">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-600 hover:text-black">
-                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.199 6.836 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.704-2.782.605-3.37-.271-3.37-.271-.454-1.155-1.107-1.465-1.107-1.465-.905-.62.068-.608.068-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.918.831.092-.647.35-1.087.636-1.334-2.22-.253-4.555-1.11-4.555-4.943 0-1.092.39-1.983 1.03-2.675-.104-.252-.445-1.266.098-2.651 0 0 .84-.272 2.75 1.025.795-.22 1.635-.33 2.47-.33.835 0 1.675.11 2.47.33 1.91-1.297 2.75-1.025 2.75-1.025.543 1.385.202 2.399.098 2.651.64.692 1.03 1.583 1.03 2.675 0 3.843-2.335 4.687-4.567 4.935.359.309.678.922.678 1.867 0 1.334-.012 2.41-.012 2.723 0 .268.18.58.688.482C19.136 20.198 22 16.419 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" />
-                </svg>
-            </a>
-        </span>
-    </footer>
+    </main>
 
     <script>
+        // --- MULTI-APP NAVIGATION LOGIC ---
+        function switchView(viewName) {
+            // Tüm viewleri gizle
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            
+            // Seçilen view'i göster
+            const targetView = document.getElementById('view-' + viewName);
+            if (targetView) targetView.classList.remove('hidden');
+
+            // Navigasyon stillerini güncelle
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById('nav-' + viewName);
+            if (activeNav) activeNav.classList.add('active');
+        }
+
+        // --- EXISTING PEARSON LOGIC ---
         const translations = {
             tr: {
-                title: "🔗 Pearson r Birleştirici",
-                subtitle: "Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.",
-                section_input: "Alt Boyut ve r Katsayısı",
-                label_subscale: "Alt Boyut Adı (Örn: Planlama, İzleme, Değerlendirme):",
-                placeholder_subscale: "Alt boyut adı",
-                error_subscale: "Lütfen alt boyutun adını girin.",
-                label_r: "Korelasyon Katsayısı (r):",
-                placeholder_r: "-1.0 ile 1.0 arasında",
-                error_r: "Lütfen -1 ile 1 arasında geçerli bir r değeri girin.",
-                label_n: "Örneklem Büyüklüğü (n):",
-                placeholder_n: "Minimum 3 olmalıdır",
-                button_lock: "Sabitle",
-                error_n: "Lütfen 3 veya daha büyük bir n değeri girin.",
-                button_add: "Alt Boyutu Ekle",
-                section_output: "Girilen Korelasyonlar ve Sonuç",
-                placeholder_list: "Henüz alt boyut korelasyonu eklenmedi.",
-                button_calculate: "Birleştirilmiş r'yi Hesapla",
-                button_clear_all: "Tüm Verileri Temizle",
-                results_heading: "Hesaplama Sonuçları",
-                label_combined_r: "Birleştirilmiş Pearson r:",
-                label_avg_z: "Ortalama Fisher Z (Z̄):",
-                note_calculation: "Not: Bu hesaplama, her bir alt boyut korelasyonunun örneklem büyüklüğü (n) ile ağırlıklandırıldığı Fisher'ın Z dönüşümüne dayanır.",
-                section_history: "Geçmiş Birleştirmeler (Son 10 Kayıt)",
-                button_clear_history: "Geçmişi Temizle",
-                placeholder_history: "Henüz kaydedilmiş bir birleştirme yok.",
-                button_load: "Yükle",
-                button_share: "Paylaş",
-                button_copy: "Kopyala",
-                msg_n_locked: (n) => `Örneklem büyüklüğü N=${n} olarak sabitlendi.`,
-                msg_n_unlocked: "Örneklem büyüklüğü kilidi kaldırıldı.",
-                msg_entry_added: (title, n) => `"${title}" alt boyutu başarıyla eklendi (N=${n}).`,
-                msg_entry_removed: "Alt boyut korelasyonu kaldırıldı.",
-                msg_clear_all: "Tüm veriler temizlendi. Yeni bir hesaplamaya başlayabilirsiniz.",
-                msg_copy_success: (r) => `"${r}" panoya kopyalandı!`,
-                msg_share_copied: "Paylaşım bağlantısı panoya kopyalandı!",
-                msg_url_loaded: "URL'den alt boyutlar başarıyla yüklendi ve sonuç hesaplandı.",
-                msg_url_error: "URL'deki veri yüklenirken hata oluştu.",
-                msg_invalid_fields: "Lütfen tüm geçerli alanları doldurun.",
-                msg_min_entries: "Hesaplama için en az 2 alt boyut korelasyonu gereklidir.",
-                msg_restore_success: (r) => `"${r}" sonucuyla birlikte geçmiş kayıt başarıyla yüklendi.`,
-                msg_history_cleared: "Tüm geçmiş kayıtları başarıyla silindi."
+                title: "Akademik SuperApp",
+                // Sidebar Menu Items
+                "Pearson r Birleştirici": "Pearson r Birleştirici",
+                "Etki Büyüklüğü": "Etki Büyüklüğü",
+                "Örneklem Hesaplayıcı": "Örneklem Hesaplayıcı",
+                "Normallik Testi": "Normallik Testi",
+                "APA 7 Oluşturucu": "APA 7 Oluşturucu",
+                "Özet Kontrolü": "Özet Kontrolü",
+                "PRISMA Sayacı": "PRISMA Sayacı",
+                "PICO Oluşturucu": "PICO Oluşturucu",
+                "Rastgele Atama": "Rastgele Atama",
+                "Veri Analizi": "Veri Analizi",
+                "Yazım & Referans": "Yazım & Referans",
+                "Araştırma Süreci": "Araştırma Süreci",
+
+                // Pearson specific
+                pearson_title: "Pearson r Birleştirici",
+                pearson_desc: "Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.",
+                sec_input: "Alt Boyut ve r Katsayısı",
+                sec_list: "Girilen Veriler ve Sonuç",
+                lbl_subscale: "Alt Boyut Adı:",
+                ph_subscale: "Alt boyut adı",
+                err_subscale: "Lütfen alt boyutun adını girin.",
+                lbl_r: "Korelasyon Katsayısı (r):",
+                ph_r: "-1.0 ile 1.0 arasında",
+                err_r: "Geçersiz r değeri.",
+                lbl_n: "Örneklem Büyüklüğü (n):",
+                ph_n: "Min 3",
+                err_n: "Geçersiz n değeri.",
+                btn_lock: "Sabitle",
+                btn_add: "Alt Boyutu Ekle",
+                ph_list_empty: "Liste boş.",
+                btn_calc: "Birleştirilmiş r'yi Hesapla",
+                btn_clear: "Temizle",
+                sec_result: "Sonuç",
+                lbl_combined: "Birleşik r:",
+                btn_copy: "Kopyala",
+                lbl_avg_z: "Ortalama Z:",
+                sec_history: "Geçmiş Kayıtlar",
+                btn_clear_hist: "Geçmişi Sil",
+                btn_load: "Yükle",
+                btn_share: "Paylaş",
+                ph_history: "Henüz geçmiş kayıt yok.",
+                msg_copied: "Kopyalandı!",
+                msg_share_copied: "Paylaşım linki kopyalandı!",
+                msg_url_loaded: "Linkten veri yüklendi.",
+                msg_url_err: "Link hatası.",
+                msg_min_entry: "En az 2 veri gerekli.",
+                msg_locked: (n) => `N=${n} kilitli.`,
+                msg_unlocked: "Kilit açıldı.",
+                msg_added: (t,n) => `Eklendi: ${t} (N=${n})`,
+                msg_removed: "Silindi.",
+                msg_cleared: "Temizlendi."
             },
             en: {
-                title: "🔗 Pearson r Combiner",
-                subtitle: "Weighted average correlation calculation tool using Fisher's Z-Transformation.",
-                section_input: "Subscale and r Coefficient",
-                label_subscale: "Subscale Name (Ex: Planning, Monitoring, Evaluation):",
-                placeholder_subscale: "Subscale name",
-                error_subscale: "Please enter the name of the subscale.",
-                label_r: "Correlation Coefficient (r):",
-                placeholder_r: "Between -1.0 and 1.0",
-                error_r: "Please enter a valid r value between -1 and 1.",
-                label_n: "Sample Size (n):",
-                placeholder_n: "Minimum 3 is required",
-                button_lock: "Lock",
-                error_n: "Please enter an n value of 3 or greater.",
-                button_add: "Add Subscale",
-                section_output: "Inputted Correlations and Result",
-                placeholder_list: "No subscale correlation has been added yet.",
-                button_calculate: "Calculate Combined r",
-                button_clear_all: "Clear All Data",
-                results_heading: "Calculation Results",
-                label_combined_r: "Combined Pearson r:",
-                label_avg_z: "Average Fisher Z (Z̄):",
-                note_calculation: "Note: This calculation is based on Fisher's Z-transformation, where each subscale correlation is weighted by its sample size (n).",
-                section_history: "Past Combinations (Last 10 Records)",
-                button_clear_history: "Clear History",
-                placeholder_history: "No recorded combination yet.",
-                button_load: "Load",
-                button_share: "Share",
-                button_copy: "Copy",
-                msg_n_locked: (n) => `Sample size N=${n} is locked.`,
-                msg_n_unlocked: "Sample size lock removed.",
-                msg_entry_added: (title, n) => `"${title}" subscale added successfully (N=${n}).`,
-                msg_entry_removed: "Subscale correlation removed.",
-                msg_clear_all: "All data cleared. You can start a new calculation.",
-                msg_copy_success: (r) => `"${r}" copied to clipboard!`,
-                msg_share_copied: "Share link copied to clipboard!",
-                msg_url_loaded: "Subscales loaded successfully from URL and results calculated.",
-                msg_url_error: "Error loading data from URL.",
-                msg_invalid_fields: "Please fill in all valid fields.",
-                msg_min_entries: "At least 2 subscale correlations are required for calculation.",
-                msg_restore_success: (r) => `Past record successfully loaded with result "${r}".`,
-                msg_history_cleared: "All history records successfully deleted."
+                title: "Academic SuperApp",
+                // Sidebar Menu Items
+                "Pearson r Combiner": "Pearson r Combiner",
+                "Effect Size Calculator": "Effect Size Calculator",
+                "Sample Size Calculator": "Sample Size Calculator",
+                "Normality Test": "Normality Test",
+                "APA 7 Generator": "APA 7 Generator",
+                "Abstract Checker": "Abstract Checker",
+                "PRISMA Counter": "PRISMA Counter",
+                "PICO Generator": "PICO Generator",
+                "Randomizer": "Randomizer",
+                "Data Analysis": "Data Analysis",
+                "Writing & Reference": "Writing & Reference",
+                "Research Process": "Research Process",
+
+                // Pearson specific
+                pearson_title: "Pearson r Combiner",
+                pearson_desc: "Weighted average correlation calculation tool using Fisher's Z-Transformation.",
+                sec_input: "Subscale & r Value",
+                sec_list: "Entries & Result",
+                lbl_subscale: "Subscale Name:",
+                ph_subscale: "Subscale name",
+                err_subscale: "Enter subscale name.",
+                lbl_r: "Correlation (r):",
+                ph_r: "Between -1.0 and 1.0",
+                err_r: "Invalid r value.",
+                lbl_n: "Sample Size (n):",
+                ph_n: "Min 3",
+                err_n: "Invalid n value.",
+                btn_lock: "Lock",
+                btn_add: "Add Entry",
+                ph_list_empty: "List is empty.",
+                btn_calc: "Calculate Combined r",
+                btn_clear: "Clear",
+                sec_result: "Result",
+                lbl_combined: "Combined r:",
+                btn_copy: "Copy",
+                lbl_avg_z: "Avg Z:",
+                sec_history: "History",
+                btn_clear_hist: "Clear History",
+                btn_load: "Load",
+                btn_share: "Share",
+                ph_history: "No history yet.",
+                msg_copied: "Copied!",
+                msg_share_copied: "Share link copied!",
+                msg_url_loaded: "Data loaded from link.",
+                msg_url_err: "Link error.",
+                msg_min_entry: "Need at least 2 entries.",
+                msg_locked: (n) => `N=${n} locked.`,
+                msg_unlocked: "Unlocked.",
+                msg_added: (t,n) => `Added: ${t} (N=${n})`,
+                msg_removed: "Removed.",
+                msg_cleared: "Cleared."
             }
         };
 
-        let currentLang = document.documentElement.lang || 'tr';
+        let currentLang = 'tr';
         let correlationData = [];
         let isNLocked = false;
         let lockedNValue = null;
-
-        const titleInput = document.getElementById('entry_title');
-        const rScoreInput = document.getElementById('r_score');
-        const nSizeInput = document.getElementById('n_size');
-        const nLockButton = document.getElementById('n_lock_button');
-        const titleError = document.getElementById('title_error');
-        const rError = document.getElementById('r_error');
-        const nError = document.getElementById('n_error');
-        const dataList = document.getElementById('data_list');
-        const placeholderText = document.getElementById('placeholder_text');
-        const calculateButton = document.getElementById('calculate_button');
-        const resultsArea = document.getElementById('results_area');
-        const messageArea = document.getElementById('message_area');
-        const combinedRText = document.getElementById('combined_r');
-        const copyMessageArea = document.getElementById('copy_message_area');
-        const historyListElement = document.getElementById('history_list');
-        const langTrButton = document.getElementById('lang-tr');
-        const langEnButton = document.getElementById('lang-en');
-
         const HISTORY_KEY = 'pearson_r_history';
 
-        function init() {
+        // Elements
+        const el = {
+            titleInput: document.getElementById('entry_title'),
+            rScoreInput: document.getElementById('r_score'),
+            nSizeInput: document.getElementById('n_size'),
+            nLockButton: document.getElementById('n_lock_button'),
+            dataList: document.getElementById('data_list'),
+            calcBtn: document.getElementById('calculate_button'),
+            resultsArea: document.getElementById('results_area'),
+            combinedRText: document.getElementById('combined_r'),
+            avgZText: document.getElementById('avg_z'),
+            msgArea: document.getElementById('message_area'),
+            copyMsgArea: document.getElementById('copy_message_area'),
+            histList: document.getElementById('history_list'),
+            clearHistBtn: document.getElementById('clear_history_button'),
+            langTr: document.getElementById('lang-tr'),
+            langEn: document.getElementById('lang-en')
+        };
+
+        // --- INIT ---
+        window.onload = function() {
+            const savedLang = localStorage.getItem('appLang');
+            setLanguage(savedLang || 'tr', false);
+            
+            // URL Yükleme Kontrolü
             const urlLoaded = loadFromUrl();
-            if (!urlLoaded) {
-                const savedLang = localStorage.getItem('appLang');
-                setLanguage(savedLang || 'tr', false); 
-                renderHistoryList(getHistoryData()); // Load list, no re-render loop
-                rScoreInput.value = '0.'; 
+            if(!urlLoaded) {
+                renderHistoryList(getHistory()); // FIXED: loadHistory yerine getHistory ve render
+                el.rScoreInput.value = '0.';
             }
+        };
+
+        function setLanguage(lang, save=true) {
+            if(!translations[lang]) return;
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // DOM Text Update
+            document.querySelectorAll('[data-tr]').forEach(item => {
+                const keyTR = item.getAttribute('data-tr');
+                const keyEN = item.getAttribute('data-en');
+                item.innerHTML = (lang === 'tr' ? keyTR : keyEN)
+                    .replace('(r)', '<span class="symbol">r</span>')
+                    .replace('(n)', '<span class="symbol">n</span>')
+                    .replace('(Z̄)', '<span class="symbol">Z̄</span>');
+            });
+
+            // Placeholders
+            document.querySelectorAll('[data-tr-placeholder]').forEach(item => {
+                item.placeholder = lang === 'tr' ? item.getAttribute('data-tr-placeholder') : item.getAttribute('data-en-placeholder');
+            });
+
+            // Button Styles
+            el.langTr.className = lang === 'tr' ? "text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors" : "text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors";
+            el.langEn.className = lang === 'en' ? "text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors" : "text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors";
+
+            // Update Lock Button Text
+            updateLockBtnText();
+
+            if(save) localStorage.setItem('appLang', lang);
+            renderDataList();
+            renderHistoryList(getHistory());
         }
-        
+
         function loadFromUrl() {
             const params = new URLSearchParams(window.location.search);
-            const encodedData = params.get('data');
-            const langParam = params.get('lang');
-            
-            if (langParam) {
-                setLanguage(langParam, false);
-            }
+            const data = params.get('data');
+            const lang = params.get('lang');
+            if(lang) setLanguage(lang, false);
 
-            if (encodedData) {
+            if(data) {
                 try {
-                    const jsonString = decodeURIComponent(encodedData);
-                    const loadedEntries = JSON.parse(jsonString);
-
-                    if (Array.isArray(loadedEntries) && loadedEntries.length >= 2) {
-                        clearAllData(false);
-                        correlationData = loadedEntries;
+                    const parsed = JSON.parse(decodeURIComponent(data));
+                    if(Array.isArray(parsed) && parsed.length >= 2) {
+                        correlationData = parsed;
                         renderDataList();
-                        calculateCombinedR(true); 
-                        
+                        calculateCombinedR(true);
+                        // Clean URL without refresh
                         const baseUrl = window.location.href.split('?')[0];
                         window.history.replaceState(null, null, baseUrl);
-                        
                         showMessage(translations[currentLang].msg_url_loaded, 'bg-indigo-100 text-indigo-700');
                         return true;
                     }
-                } catch (e) {
-                    console.error("URL error:", e);
-                    showMessage(translations[currentLang].msg_url_error, 'bg-red-100 text-red-700');
-                }
+                } catch(e) { showMessage(translations[currentLang].msg_url_err, 'bg-red-100 text-red-700'); }
             }
             return false;
         }
 
-        function setLanguage(lang, save = true) {
-            if (!translations[lang]) return;
-
-            currentLang = lang;
-            document.documentElement.lang = lang; 
-
-            document.querySelectorAll('[data-tr], [data-en]').forEach(el => {
-                const key = el.getAttribute(`data-${lang}`);
-                if (key) {
-                    if (el.children.length === 0 || el.tagName === 'BUTTON') { 
-                        el.textContent = key;
-                    } else {
-                        let content = key;
-                        content = content.replace('(r)', '<span class="symbol">r</span>');
-                        content = content.replace('(n)', '<span class="symbol">n</span>');
-                        content = content.replace('(Z̄)', '<span class="symbol">Z̄</span>');
-                        el.innerHTML = content;
-                    }
-                }
-            });
-            
-            document.querySelectorAll('[data-tr-placeholder], [data-en-placeholder]').forEach(el => {
-                const placeholderKey = el.getAttribute(`data-${lang}-placeholder`);
-                if (placeholderKey) {
-                    el.placeholder = placeholderKey;
-                }
-            });
-
-            if (isNLocked) {
-                nLockButton.textContent = `${lang === 'tr' ? 'Kilitli' : 'Locked'} (N=${lockedNValue})`;
-            } else {
-                nLockButton.textContent = translations[lang].button_lock;
-            }
-            
-            langTrButton.className = lang === 'tr' ? "text-sm font-semibold px-3 py-1 rounded-full border border-indigo-600 text-white bg-indigo-600" : "text-sm font-semibold px-3 py-1 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100";
-            langEnButton.className = lang === 'en' ? "text-sm font-semibold px-3 py-1 rounded-full border border-indigo-600 text-white bg-indigo-600" : "text-sm font-semibold px-3 py-1 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100";
-
-            if (save) {
-                localStorage.setItem('appLang', lang);
-            }
-            
-            // Re-render history only on language change
-            renderHistoryList(getHistoryData()); 
-            renderDataList(); 
-        }
-
+        // --- CORE LOGIC ---
         function toggleNLock() {
-            const lang = currentLang;
-            if (!isNLocked) {
-                const n = parseInt(nSizeInput.value, 10);
-                if (isNaN(n) || n < 3) {
-                    toggleError(nError, true);
-                    showMessage(translations[lang].error_n, 'bg-red-100 text-red-700'); 
+            if(!isNLocked) {
+                const val = parseInt(el.nSizeInput.value, 10);
+                if(isNaN(val) || val < 3) {
+                    showMessage(translations[currentLang].err_n, 'bg-red-100 text-red-700');
                     return;
                 }
-                toggleError(nError, false);
-
                 isNLocked = true;
-                lockedNValue = n;
-                nSizeInput.disabled = true;
-                nLockButton.textContent = `${lang === 'tr' ? 'Kilitli' : 'Locked'} (N=${n})`;
-                
-                nLockButton.classList.remove('btn-lock-default', 'bg-gray-400', 'hover:bg-gray-500');
-                nLockButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
-                
-                showMessage(translations[lang].msg_n_locked(n), 'bg-indigo-100 text-indigo-700');
-
+                lockedNValue = val;
+                el.nSizeInput.disabled = true;
+                el.nLockButton.classList.replace('btn-lock-default', 'bg-indigo-600');
+                el.nLockButton.classList.add('hover:bg-indigo-700');
+                showMessage(translations[currentLang].msg_locked(val), 'bg-indigo-100 text-indigo-700');
             } else {
                 isNLocked = false;
                 lockedNValue = null;
-                nSizeInput.disabled = false;
-                nSizeInput.value = '';
-                nSizeInput.focus();
-                nLockButton.textContent = translations[lang].button_lock;
-                
-                nLockButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
-                nLockButton.classList.add('btn-lock-default');
-                
-                showMessage(translations[lang].msg_n_unlocked, 'bg-yellow-100 text-yellow-700');
+                el.nSizeInput.disabled = false;
+                el.nSizeInput.value = '';
+                el.nLockButton.classList.replace('bg-indigo-600', 'btn-lock-default');
+                el.nLockButton.classList.remove('hover:bg-indigo-700');
+                showMessage(translations[currentLang].msg_unlocked, 'bg-yellow-100 text-yellow-700');
+            }
+            updateLockBtnText();
+        }
+
+        function updateLockBtnText() {
+            const t = translations[currentLang];
+            if(isNLocked) {
+                el.nLockButton.textContent = (currentLang === 'tr' ? 'Kilitli' : 'Locked') + ` (N=${lockedNValue})`;
+            } else {
+                el.nLockButton.textContent = t.btn_lock;
             }
         }
 
-        function handleKeydown(event) {
-            if (event.key === 'Enter' || event.keyCode === 13) {
-                event.preventDefault(); 
-                addEntry();
-            }
-        }
-
-        function toggleError(element, isVisible) {
-            element.classList.toggle('hidden', !isVisible);
+        function handleKeydown(e) {
+            if(e.key === 'Enter') addEntry();
         }
 
         function addEntry() {
-            const lang = currentLang;
-            const title = titleInput.value.trim();
-            const r = parseFloat(rScoreInput.value);
-            
-            let n;
-            if (isNLocked) {
-                n = lockedNValue;
-            } else {
-                n = parseInt(nSizeInput.value, 10);
-            }
-            
-            let isValid = true;
+            const t = translations[currentLang];
+            const title = el.titleInput.value.trim();
+            const r = parseFloat(el.rScoreInput.value);
+            let n = isNLocked ? lockedNValue : parseInt(el.nSizeInput.value, 10);
 
-            if (title === "") {
-                toggleError(titleError, true);
-                isValid = false;
-            } else {
-                toggleError(titleError, false);
-            }
+            // Validation
+            let valid = true;
+            if(!title) { document.getElementById('title_error').classList.remove('hidden'); valid = false; }
+            else document.getElementById('title_error').classList.add('hidden');
 
-            if (isNaN(r) || r < -1 || r > 1) {
-                toggleError(rError, true);
-                isValid = false;
-            } else {
-                toggleError(rError, false);
-            }
+            if(isNaN(r) || r < -1 || r > 1) { document.getElementById('r_error').classList.remove('hidden'); valid = false; }
+            else document.getElementById('r_error').classList.add('hidden');
 
-            if (isNaN(n) || n < 3) {
-                if (!isNLocked) {
-                    toggleError(nError, true);
-                }
-                isValid = false;
-            } else {
-                toggleError(nError, false);
-            }
+            if(isNaN(n) || n < 3) { 
+                if(!isNLocked) document.getElementById('n_error').classList.remove('hidden'); 
+                valid = false; 
+            } else document.getElementById('n_error').classList.add('hidden');
 
-            if (!isValid) {
-                showMessage(translations[lang].msg_invalid_fields, 'bg-red-100 text-red-700');
+            if(!valid) {
+                showMessage(currentLang === 'tr' ? 'Lütfen alanları kontrol edin.' : 'Please check fields.', 'bg-red-100 text-red-700');
                 return;
             }
 
             correlationData.push({ title, r, n });
             
-            titleInput.value = '';
-            rScoreInput.value = '0.'; 
-            if (!isNLocked) {
-                nSizeInput.value = '';
-            }
-            titleInput.focus(); 
-            
+            // Reset Inputs
+            el.titleInput.value = '';
+            el.rScoreInput.value = '0.';
+            if(!isNLocked) el.nSizeInput.value = '';
+            el.titleInput.focus();
+
             renderDataList();
-            
-            showMessage(translations[lang].msg_entry_added(title, n), 'bg-green-100 text-green-700');
-            
-            calculateButton.disabled = correlationData.length < 2;
+            showMessage(t.msg_added(title, n), 'bg-green-100 text-green-800');
+            el.calcBtn.disabled = correlationData.length < 2;
         }
 
         function renderDataList() {
-            dataList.innerHTML = '';
-            if (correlationData.length === 0) {
-                dataList.innerHTML = `<p id="placeholder_text" class="text-gray-400 italic text-sm text-center py-4">${translations[currentLang].placeholder_list}</p>`;
-                resultsArea.classList.add('hidden');
-                calculateButton.disabled = true;
+            el.dataList.innerHTML = '';
+            if(correlationData.length === 0) {
+                el.dataList.innerHTML = `<p class="text-gray-400 italic text-sm text-center py-8">${translations[currentLang].ph_list_empty}</p>`;
+                el.resultsArea.classList.add('hidden');
+                el.calcBtn.disabled = true;
                 return;
             }
 
-            correlationData.forEach((data, index) => {
-                const item = document.createElement('div');
-                item.className = 'flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-3 rounded-lg border border-gray-200';
-                item.innerHTML = `
-                    <div class="flex flex-col">
-                        <span class="font-bold text-gray-800">${data.title}</span>
-                        <span class="text-gray-600 text-sm mt-1">r = ${data.r.toFixed(3)}, n = ${data.n}</span>
+            correlationData.forEach((d, i) => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-white p-3 rounded border border-gray-200 mb-2 last:mb-0';
+                div.innerHTML = `
+                    <div class="truncate pr-2">
+                        <span class="font-bold text-gray-800 block truncate">${d.title}</span>
+                        <span class="text-xs text-gray-500">r=${d.r}, n=${d.n}</span>
                     </div>
-                    <button onclick="removeEntry(${index})" class="text-red-500 hover:text-red-700 text-sm font-semibold transition duration-150 mt-2 sm:mt-0">${currentLang === 'tr' ? 'Kaldır' : 'Remove'}</button>
+                    <button onclick="removeEntry(${i})" class="text-red-500 hover:text-red-700 text-sm font-semibold px-2 py-1 bg-red-50 rounded hover:bg-red-100 transition">
+                        ${currentLang === 'tr' ? 'Sil' : 'Del'}
+                    </button>
                 `;
-                dataList.appendChild(item);
+                el.dataList.appendChild(div);
             });
         }
 
-        function removeEntry(index) {
-            correlationData.splice(index, 1);
+        function removeEntry(i) {
+            correlationData.splice(i, 1);
             renderDataList();
-            showMessage(translations[currentLang].msg_entry_removed, 'bg-yellow-100 text-yellow-700');
-            calculateButton.disabled = correlationData.length < 2;
-            if (correlationData.length < 2) {
-                resultsArea.classList.add('hidden');
-            }
+            el.calcBtn.disabled = correlationData.length < 2;
+            if(correlationData.length < 2) el.resultsArea.classList.add('hidden');
         }
 
-        function clearAllData(skipMessage = true) {
-            const lang = currentLang;
-
-            if (isNLocked) {
-                toggleNLock();
-            }
-
+        function clearAllData(silent=false) {
+            if(isNLocked) toggleNLock();
             correlationData = [];
-            
             renderDataList();
-            
-            titleInput.value = '';
-            rScoreInput.value = '0.'; 
-            nSizeInput.value = '';
-            
-            resultsArea.classList.add('hidden');
-            
-            if (!skipMessage) {
-                showMessage(translations[lang].msg_clear_all, 'bg-yellow-100 text-yellow-700');
-            }
+            el.titleInput.value = '';
+            el.rScoreInput.value = '0.';
+            el.nSizeInput.value = '';
+            el.resultsArea.classList.add('hidden');
+            if(!silent) showMessage(translations[currentLang].msg_cleared, 'bg-yellow-100 text-yellow-800');
         }
 
-        function copyDynamicText(textToCopy, successMessage) {
-            const tempInput = document.createElement('input');
-            tempInput.value = textToCopy;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-
-            copyMessageArea.textContent = successMessage;
-            copyMessageArea.className = 'text-sm text-center py-1 rounded-lg mt-2 bg-green-100 text-green-700';
-            copyMessageArea.classList.remove('hidden');
-            
-            setTimeout(() => {
-                copyMessageArea.classList.add('hidden');
-            }, 3000);
-        }
-
-        function copyResult() {
-            const rValue = combinedRText.textContent;
-            copyDynamicText(rValue, translations[currentLang].msg_copy_success(rValue));
-        }
-        
-        function toggleShare(index) {
-            const shareArea = document.getElementById(`share-area-${index}`);
-            
-            if (shareArea.classList.contains('hidden')) {
-                const entry = getHistoryData()[index];
-                const shareData = entry.entries;
-                const jsonString = JSON.stringify(shareData);
-                const encodedData = encodeURIComponent(jsonString);
-                
-                const baseUrl = window.location.href.split('?')[0];
-                const shareLink = `${baseUrl}?data=${encodedData}&lang=${currentLang}`;
-                
-                const input = document.getElementById(`share-input-${index}`);
-                input.value = shareLink;
-                
-                shareArea.classList.remove('hidden');
-            } else {
-                shareArea.classList.add('hidden');
-            }
-        }
-
-        function copyShareLink(index) {
-            const input = document.getElementById(`share-input-${index}`);
-            input.select();
-            document.execCommand('copy');
-            
-            const btn = event.currentTarget; 
-            const originalText = btn.textContent;
-            btn.textContent = currentLang === 'tr' ? 'Kopyalandı!' : 'Copied!';
-            setTimeout(() => {
-                btn.textContent = originalText;
-            }, 1500);
-        }
-
-        function calculateCombinedR(skipHistorySave = false) {
-            const lang = currentLang;
-            if (correlationData.length < 2) {
-                showMessage(translations[lang].msg_min_entries, 'bg-red-100 text-red-700');
-                resultsArea.classList.add('hidden');
-                return;
-            }
+        function calculateCombinedR(skipHistory=false) {
+            if(correlationData.length < 2) return;
 
             let sumWeightedZ = 0;
             let sumWeights = 0;
 
-            correlationData.forEach(data => {
-                const r = data.r;
-                const n = data.n;
-                const z = 0.5 * Math.log((1 + r) / (1 - r));
-                const weight = n - 3;
-                sumWeightedZ += weight * z;
-                sumWeights += weight;
+            correlationData.forEach(d => {
+                const z = 0.5 * Math.log((1 + d.r) / (1 - d.r));
+                const w = d.n - 3;
+                sumWeightedZ += w * z;
+                sumWeights += w;
             });
 
             const avgZ = sumWeightedZ / sumWeights;
-            const exp2Z = Math.exp(2 * avgZ);
-            const combinedR = (exp2Z - 1) / (exp2Z + 1);
+            const combinedR = (Math.exp(2 * avgZ) - 1) / (Math.exp(2 * avgZ) + 1);
 
-            combinedRText.textContent = combinedR.toFixed(3);
-            document.getElementById('avg_z').textContent = avgZ.toFixed(4);
-            resultsArea.classList.remove('hidden');
+            el.combinedRText.textContent = combinedR.toFixed(3);
+            el.avgZText.textContent = avgZ.toFixed(4);
+            el.resultsArea.classList.remove('hidden');
 
-            if (!skipHistorySave) {
-                const newEntry = {
-                    timestamp: Date.now(),
-                    combinedR: combinedR,
-                    avgZ: avgZ,
-                    entries: correlationData.map(e => ({ title: e.title, r: e.r, n: e.n })) 
+            if(!skipHistory) {
+                const entry = {
+                    ts: Date.now(),
+                    res: combinedR,
+                    data: correlationData.map(x => ({...x}))
                 };
-                saveHistory(newEntry);
+                saveHistory(entry);
             }
         }
-        
-        function showMessage(message, className) {
-            copyMessageArea.classList.add('hidden'); 
-            messageArea.textContent = message;
-            messageArea.className = `text-sm text-center py-2 rounded-lg mt-2 ${className}`;
-            messageArea.classList.remove('hidden');
-            
-            setTimeout(() => {
-                messageArea.classList.add('hidden');
-            }, 3000);
+
+        function showMessage(msg, classes) {
+            el.msgArea.textContent = msg;
+            el.msgArea.className = `text-sm text-center py-2 rounded-lg mb-2 ${classes}`;
+            el.msgArea.classList.remove('hidden');
+            setTimeout(() => el.msgArea.classList.add('hidden'), 3000);
         }
 
-        function getHistoryData() {
+        // --- RESULTS COPY ---
+        function copyResult() {
+            const txt = el.combinedRText.textContent;
+            navigator.clipboard.writeText(txt).then(() => {
+                el.copyMsgArea.textContent = translations[currentLang].msg_copied;
+                el.copyMsgArea.classList.remove('hidden');
+                setTimeout(() => el.copyMsgArea.classList.add('hidden'), 2000);
+            });
+        }
+
+        // --- HISTORY ---
+        function getHistory() {
             return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
         }
 
-        function saveHistory(newEntry) {
-            const historyData = getHistoryData();
-            historyData.unshift(newEntry);
-            const limitedHistory = historyData.slice(0, 10);
-            localStorage.setItem(HISTORY_KEY, JSON.stringify(limitedHistory));
-            renderHistoryList(limitedHistory);
-        }
-
-        function renderHistoryList(historyData) {
-            if (!historyListElement) return; 
-
-            historyListElement.innerHTML = '';
-            
-            const clearHistoryButton = document.getElementById('clear_history_button');
-
-            if (historyData.length === 0) {
-                historyListElement.innerHTML = `<p class="text-gray-400 italic text-sm text-center py-4">${translations[currentLang].placeholder_history}</p>`;
-                clearHistoryButton.classList.add('hidden');
-                return;
-            }
-
-            historyData.forEach((entry, index) => {
-                const item = document.createElement('div');
-                item.className = 'bg-white p-3 rounded-lg border border-gray-200 shadow-sm transition duration-150 hover:bg-gray-100';
-                
-                const date = new Date(entry.timestamp).toLocaleString(currentLang === 'tr' ? 'tr-TR' : 'en-US', { dateStyle: 'short', timeStyle: 'short' });
-                
-                item.innerHTML = `
-                    <div class="flex justify-between items-center mb-2 border-b pb-1">
-                        <span class="text-sm font-semibold text-gray-800">${date} (${entry.entries.length} ${currentLang === 'tr' ? 'Alt Boyut' : 'Subscales'})</span>
-                        <span class="text-green-600 font-extrabold text-lg">r = ${entry.combinedR.toFixed(3)}</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mb-2 truncate">${currentLang === 'tr' ? 'Alt Boyutlar' : 'Subscales'}: ${entry.entries.map(e => e.title).join(' / ')}</p>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="restoreEntry(${index})" class="text-xs text-indigo-500 hover:text-indigo-700 font-medium transition duration-150">${translations[currentLang].button_load}</button>
-                        <button onclick="toggleShare(${index})" class="text-xs text-blue-500 hover:text-blue-700 font-medium transition duration-150">${translations[currentLang].button_share}</button>
-                        
-                        <div id="share-area-${index}" class="hidden flex items-center space-x-1 flex-1 min-w-[150px]">
-                            <input type="text" id="share-input-${index}" class="text-xs border rounded px-1 py-0.5 w-full text-gray-600 bg-gray-50 focus:ring-1 focus:ring-blue-300 outline-none" readonly>
-                            <button onclick="copyShareLink(${index})" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 rounded px-2 py-0.5 whitespace-nowrap transition duration-150">${translations[currentLang].button_copy}</button>
-                        </div>
-                    </div>
-                `;
-                historyListElement.appendChild(item);
-            });
-            
-            clearHistoryButton.classList.remove('hidden');
-        }
-
-        function restoreEntry(index) {
-            const lang = currentLang;
-            const historyData = getHistoryData();
-            const entry = historyData[index];
-            
-            correlationData = entry.entries;
-            renderDataList();
-            calculateCombinedR(true); 
-            showMessage(translations[lang].msg_restore_success(entry.combinedR.toFixed(3)), 'bg-indigo-100 text-indigo-700');
+        function saveHistory(entry) {
+            const h = getHistory();
+            h.unshift(entry);
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 10)));
+            renderHistoryList(getHistory());
         }
 
         function clearHistory() {
-            const lang = currentLang;
-            if (localStorage.getItem(HISTORY_KEY)) {
-                localStorage.removeItem(HISTORY_KEY);
-                renderHistoryList([]);
-                showMessage(translations[lang].msg_history_cleared, 'bg-red-100 text-red-700');
+            localStorage.removeItem(HISTORY_KEY);
+            renderHistoryList([]);
+        }
+
+        function renderHistoryList(list) {
+            el.histList.innerHTML = '';
+            if(list.length === 0) {
+                el.histList.innerHTML = `<p class="text-gray-400 text-sm text-center italic py-2">${translations[currentLang].ph_history}</p>`;
+                el.clearHistBtn.classList.add('hidden');
+                return;
+            }
+            el.clearHistBtn.classList.remove('hidden');
+
+            list.forEach((item, idx) => {
+                const date = new Date(item.ts).toLocaleDateString(currentLang==='tr'?'tr-TR':'en-US', {hour:'2-digit', minute:'2-digit'});
+                const div = document.createElement('div');
+                div.className = 'bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm hover:bg-gray-100 transition';
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-semibold text-gray-700">${date}</span>
+                        <span class="font-bold text-green-600">r = ${item.res.toFixed(3)}</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mb-2 truncate">
+                        ${item.data.length} ${currentLang==='tr'?'alt boyut':'subscales'}: ${item.data.map(d=>d.title).join(', ')}
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="restoreHistory(${idx})" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium bg-indigo-50 px-2 py-1 rounded">
+                            ${translations[currentLang].btn_load}
+                        </button>
+                        <button onclick="shareHistory(${idx})" class="text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1 rounded relative share-btn">
+                            ${translations[currentLang].btn_share}
+                        </button>
+                    </div>
+                `;
+                el.histList.appendChild(div);
+            });
+        }
+
+        function restoreHistory(idx) {
+            const h = getHistory();
+            if(h[idx]) {
+                correlationData = h[idx].data.map(x=>({...x})); // deep copy ish
+                renderDataList();
+                calculateCombinedR(true);
             }
         }
-        
-        window.onload = init;
+
+        function shareHistory(idx) {
+            const h = getHistory();
+            const entry = h[idx];
+            if(!entry) return;
+
+            const json = JSON.stringify(entry.data);
+            const url = `${window.location.origin}${window.location.pathname}?data=${encodeURIComponent(json)}&lang=${currentLang}`;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                // Show tooltip feedback on button
+                const btn = event.target.closest('.share-btn');
+                const originalText = btn.textContent;
+                btn.textContent = translations[currentLang].msg_copied;
+                setTimeout(() => btn.textContent = originalText, 1500);
+            });
+        }
 
     </script>
 </body>
