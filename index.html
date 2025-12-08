@@ -58,6 +58,26 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+        
+        /* APA Form Alanları Geçiş Efekti */
+        .apa-field {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Nitel/Nicel/Karma/Sentez Kartları */
+        .design-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .design-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .design-card.selected {
+            border-color: #4f46e5; /* indigo-600 */
+            background-color: #eef2ff; /* indigo-50 */
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row overflow-hidden">
@@ -139,29 +159,43 @@
                     </button>
                 </li>
 
+                <!-- KATEGORİ: Araştırma Türleri -->
+                <li class="nav-category" data-tr="Araştırma Türleri" data-en="Research Types">Araştırma Türleri</li>
+                <li>
+                    <button onclick="switchView('qualitative')" id="nav-qualitative" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🗣️</span>
+                        <span data-tr="Nitel Araştırma" data-en="Qualitative Research">Nitel Araştırma</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('quantitative')" id="nav-quantitative" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🔢</span>
+                        <span data-tr="Nicel Araştırma" data-en="Quantitative Research">Nicel Araştırma</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('mixed')" id="nav-mixed" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🔄</span>
+                        <span data-tr="Karma Araştırma" data-en="Mixed Research">Karma Araştırma</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchView('synthesis')" id="nav-synthesis" class="nav-item w-full text-left px-6 py-3 hover:bg-gray-800 hover:text-white transition-colors duration-200 flex items-center gap-3">
+                        <span>🧬</span>
+                        <span data-tr="Sentez Çalışmaları" data-en="Synthesis Studies">Sentez Çalışmaları</span>
+                    </button>
+                </li>
+
             </ul>
         </nav>
 
-        <!-- Sidebar Footer (GÜNCELLENDİ: Daha Sade ve v1.0) -->
+        <!-- Sidebar Footer -->
         <div class="p-3 bg-gray-800 border-t border-gray-700 text-center flex flex-col items-center gap-0.5">
             <div class="text-[9px] text-gray-500 font-mono tracking-widest mb-0.5">v1.0 SuperApp</div>
-            
             <div class="footer-signature text-gray-300 text-[10px] font-bold">Made by Anıl Sarıalai ⚡</div>
-            
             <div class="flex justify-center items-center gap-2 mt-0.5">
-                <!-- GMAIL LOGOSU -->
-                <a href="mailto:anilsarialai@gmail.com" class="icon-link text-gray-400 hover:text-white transition-colors" title="E-posta Gönder">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
-                        <path d="M1.5 8.75c0-.966.784-1.75 1.75-1.75h17c.966 0 1.75.784 1.75 1.75v6.5c0 .966-.784 1.75-1.75 1.75h-17c-.966 0-1.75-.784-1.75-1.75v-6.5zm1.75-.25a.25.25 0 0 0-.25.25v6.5c0 .138.112.25.25.25h17a.25.25 0 0 0 .25-.25v-6.5a.25.25 0 0 0-.25-.25h-17zm1.196.486l6.63 4.972a.75.75 0 0 0 .948 0l6.63-4.972c.162-.121.378-.063.447.135.069.198-.01.424-.172.545l-6.72 5.04a2.25 2.25 0 0 1-2.822 0l-6.72-5.04c-.162-.121-.241-.347-.172-.545.069-.198.285-.256.447-.135z"/>
-                    </svg>
-                </a>
-                
-                <!-- GITHUB LOGOSU -->
-                <a href="https://github.com/mew1010/Pearson-r-Combiner" target="_blank" rel="noopener noreferrer" class="icon-link text-gray-400 hover:text-white transition-colors" title="GitHub">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
-                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.199 6.836 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.704-2.782.605-3.37-.271-3.37-.271-.454-1.155-1.107-1.465-1.107-1.465-.905-.62.068-.608.068-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.918.831.092-.647.35-1.087.636-1.334-2.22-.253-4.555-1.11-4.555-4.943 0-1.092.39-1.983 1.03-2.675-.104-.252-.445-1.266.098-2.651 0 0 .84-.272 2.75 1.025.795-.22 1.635-.33 2.47-.33.835 0 1.675.11 2.47.33 1.91-1.297 2.75-1.025 2.75-1.025.543 1.385.202 2.399.098 2.651.64.692 1.03 1.583 1.03 2.675 0 3.843-2.335 4.687-4.567 4.935.359.309.678.922.678 1.867 0 1.334-.012 2.41-.012 2.723 0 .268.18.58.688.482C19.136 20.198 22 16.419 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" />
-                    </svg>
-                </a>
+                <a href="mailto:anilsarialai@gmail.com" class="icon-link text-gray-400 hover:text-white transition-colors" title="E-posta Gönder"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5"><path d="M1.5 8.75c0-.966.784-1.75 1.75-1.75h17c.966 0 1.75.784 1.75 1.75v6.5c0 .966-.784 1.75-1.75 1.75h-17c-.966 0-1.75-.784-1.75-1.75v-6.5zm1.75-.25a.25.25 0 0 0-.25.25v6.5c0 .138.112.25.25.25h17a.25.25 0 0 0 .25-.25v-6.5a.25.25 0 0 0-.25-.25h-17zm1.196.486l6.63 4.972a.75.75 0 0 0 .948 0l6.63-4.972c.162-.121.378-.063.447.135.069.198-.01.424-.172.545l-6.72 5.04a2.25 2.25 0 0 1-2.822 0l-6.72-5.04c-.162-.121-.241-.347-.172-.545.069-.198.285-.256.447-.135z"/></svg></a>
+                <a href="https://github.com/mew1010/Pearson-r-Combiner" target="_blank" rel="noopener noreferrer" class="icon-link text-gray-400 hover:text-white transition-colors" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.864 8.199 6.836 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.704-2.782.605-3.37-.271-3.37-.271-.454-1.155-1.107-1.465-1.107-1.465-.905-.62.068-.608.068-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.918.831.092-.647.35-1.087.636-1.334-2.22-.253-4.555-1.11-4.555-4.943 0-1.092.39-1.983 1.03-2.675-.104-.252-.445-1.266.098-2.651 0 0 .84-.272 2.75 1.025.795-.22 1.635-.33 2.47-.33.835 0 1.675.11 2.47.33 1.91-1.297 2.75-1.025 2.75-1.025.543 1.385.202 2.399.098 2.651.64.692 1.03 1.583 1.03 2.675 0 3.843-2.335 4.687-4.567 4.935.359.309.678.922.678 1.867 0 1.334-.012 2.41-.012 2.723 0 .268.18.58.688.482C19.136 20.198 22 16.419 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg></a>
             </div>
         </div>
     </aside>
@@ -181,109 +215,191 @@
         <div class="flex-1 overflow-y-auto p-4 sm:p-8 scroll-smooth">
             <div class="max-w-5xl mx-auto">
 
+                <!-- [MEVCUT: Pearson, Effect Size, Sample, Normality, APA, Abstract] -->
+                <!-- Kod tasarrufu için önceki kod blokları aynen korunur -->
                 <!-- 1. VIEW: PEARSON R COMBINER (MEVCUT) -->
                 <div id="view-pearson" class="view-section">
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Pearson r Birleştirici" data-en="Pearson r Combiner">Pearson r Birleştirici</h2>
-                        <p class="text-gray-500" data-tr="Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı." data-en="Weighted average correlation calculation tool using Fisher's Z-Transformation.">Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.</p>
-                    </div>
-
-                    <div class="bg-white card rounded-xl p-6 sm:p-10 pearson-grid">
-                        <!-- SOL: GİRİŞ -->
-                        <div>
-                            <h3 class="text-lg font-bold text-indigo-600 mb-4 border-b pb-2" data-tr="Alt Boyut ve r Katsayısı" data-en="Subscale and r Coefficient">Alt Boyut ve r Katsayısı</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Alt Boyut Adı:" data-en="Subscale Name:">Alt Boyut Adı:</label>
-                                    <input type="text" id="entry_title" data-tr-placeholder="Alt boyut adı" data-en-placeholder="Subscale name" placeholder="Alt boyut adı" onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
-                                    <p id="title_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Lütfen alt boyutun adını girin." data-en="Please enter the name of the subscale.">Lütfen alt boyutun adını girin.</p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Korelasyon Katsayısı (r):" data-en="Correlation Coefficient (r):">Korelasyon Katsayısı (<span class="symbol">r</span>):</label>
-                                    <input type="text" id="r_score" data-tr-placeholder="-1.0 ile 1.0 arasında" data-en-placeholder="Between -1.0 and 1.0" value="0." onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
-                                    <p id="r_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Geçersiz r değeri." data-en="Invalid r value.">Geçersiz r değeri.</p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Örneklem Büyüklüğü (n):" data-en="Sample Size (n):">Örneklem Büyüklüğü (<span class="symbol">n</span>):</label>
-                                    <div class="flex space-x-2">
-                                        <input type="number" id="n_size" data-tr-placeholder="Min 3" data-en-placeholder="Min 3" placeholder="Min 3" step="1" min="3" onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
-                                        <button onclick="toggleNLock()" id="n_lock_button" class="flex-shrink-0 text-white font-semibold px-3 py-2 rounded-lg transition duration-150 text-sm btn-lock-default" data-tr="Sabitle" data-en="Lock">Sabitle</button>
-                                    </div>
-                                    <p id="n_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Geçersiz n değeri." data-en="Invalid n value.">Geçersiz n değeri.</p>
-                                </div>
-                                <button onclick="addEntry()" class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50" data-tr="Alt Boyutu Ekle" data-en="Add Subscale">Alt Boyutu Ekle</button>
-                                <div id="message_area" class="text-sm text-center py-2 rounded-lg hidden"></div>
-                            </div>
-                        </div>
-
-                        <!-- SAĞ: LİSTE VE SONUÇ -->
-                        <div class="flex flex-col h-full">
-                            <h3 class="text-lg font-bold text-green-600 mb-4 border-b pb-2" data-tr="Girilen Veriler ve Sonuç" data-en="Entries and Result">Girilen Veriler ve Sonuç</h3>
-                            
-                            <div id="data_list" class="flex-1 min-h-[150px] max-h-[300px] overflow-y-auto mb-4 p-2 bg-gray-50 rounded-lg border border-gray-200">
-                                <p id="placeholder_text" class="text-gray-400 italic text-sm text-center py-8" data-tr="Liste boş." data-en="List is empty.">Liste boş.</p>
-                            </div>
-
-                            <div class="space-y-3 mt-auto">
-                                <button onclick="calculateCombinedR()" class="w-full bg-green-600 text-white font-semibold py-2.5 rounded-lg hover:bg-green-700 transition duration-200 focus:outline-none disabled:bg-gray-400" id="calculate_button" disabled data-tr="Birleştirilmiş r'yi Hesapla" data-en="Calculate Combined r">Birleştirilmiş r'yi Hesapla</button>
-                                <button onclick="clearAllData()" class="w-full bg-red-500 text-white font-semibold py-2.5 rounded-lg hover:bg-red-600 transition duration-200 focus:outline-none" data-tr="Temizle" data-en="Clear">Temizle</button>
-                            </div>
-
-                            <!-- SONUÇ ALANI -->
-                            <div id="results_area" class="mt-6 p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 hidden">
-                                <h4 class="text-md font-semibold text-gray-800 mb-2" data-tr="Sonuç" data-en="Result">Sonuç</h4>
-                                <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-indigo-200 shadow-sm">
-                                    <p class="text-base text-gray-700 font-medium">
-                                        <span data-tr="Birleşik r:" data-en="Combined r:">Birleşik r:</span> 
-                                        <span id="combined_r" class="font-extrabold text-xl ml-2 text-indigo-700"></span>
-                                    </p>
-                                    <button onclick="copyResult()" class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1 rounded text-sm hover:bg-indigo-100 transition" data-tr="Kopyala" data-en="Copy">Kopyala</button>
-                                </div>
-                                <p class="text-xs text-gray-500 mt-2"><span data-tr="Ortalama Z:" data-en="Avg Z:">Ortalama Z:</span> <span id="avg_z" class="font-mono"></span></p>
-                                <div id="copy_message_area" class="text-xs text-center py-1 rounded mt-1 hidden bg-green-100 text-green-800"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- GEÇMİŞ -->
-                    <div class="bg-white card rounded-xl p-6 mt-8">
-                        <div class="flex justify-between items-center mb-4 border-b pb-2">
-                            <h3 class="text-lg font-bold text-gray-800" data-tr="Geçmiş Kayıtlar" data-en="History">Geçmiş Kayıtlar</h3>
-                            <button onclick="clearHistory()" id="clear_history_button" class="text-xs text-red-500 hover:text-red-700 font-medium hidden" data-tr="Geçmişi Sil" data-en="Clear History">Geçmişi Sil</button>
-                        </div>
-                        <div id="history_list" class="space-y-3"></div>
-                    </div>
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Pearson r Birleştirici" data-en="Pearson r Combiner">Pearson r Birleştirici</h2><p class="text-gray-500" data-tr="Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı." data-en="Weighted average correlation calculation tool using Fisher's Z-Transformation.">Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.</p></div>
+                    <div class="bg-white card rounded-xl p-6 sm:p-10 pearson-grid"><div><h3 class="text-lg font-bold text-indigo-600 mb-4 border-b pb-2" data-tr="Alt Boyut ve r Katsayısı" data-en="Subscale and r Coefficient">Alt Boyut ve r Katsayısı</h3><div class="space-y-4"><div><label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Alt Boyut Adı:" data-en="Subscale Name:">Alt Boyut Adı:</label><input type="text" id="entry_title" data-tr-placeholder="Alt boyut adı" data-en-placeholder="Subscale name" placeholder="Alt boyut adı" onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"><p id="title_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Lütfen alt boyutun adını girin." data-en="Please enter the name of the subscale.">Lütfen alt boyutun adını girin.</p></div><div><label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Korelasyon Katsayısı (r):" data-en="Correlation Coefficient (r):">Korelasyon Katsayısı (<span class="symbol">r</span>):</label><input type="text" id="r_score" data-tr-placeholder="-1.0 ile 1.0 arasında" data-en-placeholder="Between -1.0 and 1.0" value="0." onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"><p id="r_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Geçersiz r değeri." data-en="Invalid r value.">Geçersiz r değeri.</p></div><div><label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Örneklem Büyüklüğü (n):" data-en="Sample Size (n):">Örneklem Büyüklüğü (<span class="symbol">n</span>):</label><div class="flex space-x-2"><input type="number" id="n_size" data-tr-placeholder="Min 3" data-en-placeholder="Min 3" placeholder="Min 3" step="1" min="3" onkeydown="handleKeydown(event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"><button onclick="toggleNLock()" id="n_lock_button" class="flex-shrink-0 text-white font-semibold px-3 py-2 rounded-lg transition duration-150 text-sm btn-lock-default" data-tr="Sabitle" data-en="Lock">Sabitle</button></div><p id="n_error" class="text-sm text-red-500 mt-1 hidden" data-tr="Geçersiz n değeri." data-en="Invalid n value.">Geçersiz n değeri.</p></div><button onclick="addEntry()" class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50" data-tr="Alt Boyutu Ekle" data-en="Add Subscale">Alt Boyutu Ekle</button><div id="message_area" class="text-sm text-center py-2 rounded-lg hidden"></div></div></div><div class="flex flex-col h-full"><h3 class="text-lg font-bold text-green-600 mb-4 border-b pb-2" data-tr="Girilen Veriler ve Sonuç" data-en="Entries and Result">Girilen Veriler ve Sonuç</h3><div id="data_list" class="flex-1 min-h-[150px] max-h-[300px] overflow-y-auto mb-4 p-2 bg-gray-50 rounded-lg border border-gray-200"><p id="placeholder_text" class="text-gray-400 italic text-sm text-center py-8" data-tr="Liste boş." data-en="List is empty.">Liste boş.</p></div><div class="space-y-3 mt-auto"><button onclick="calculateCombinedR()" class="w-full bg-green-600 text-white font-semibold py-2.5 rounded-lg hover:bg-green-700 transition duration-200 focus:outline-none disabled:bg-gray-400" id="calculate_button" disabled data-tr="Birleştirilmiş r'yi Hesapla" data-en="Calculate Combined r">Birleştirilmiş r'yi Hesapla</button><button onclick="clearAllData()" class="w-full bg-red-500 text-white font-semibold py-2.5 rounded-lg hover:bg-red-600 transition duration-200 focus:outline-none" data-tr="Temizle" data-en="Clear">Temizle</button></div><div id="results_area" class="mt-6 p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 hidden"><h4 class="text-md font-semibold text-gray-800 mb-2" data-tr="Sonuç" data-en="Result">Sonuç</h4><div class="flex items-center justify-between bg-white p-3 rounded-lg border border-indigo-200 shadow-sm"><p class="text-base text-gray-700 font-medium"><span data-tr="Birleşik r:" data-en="Combined r:">Birleşik r:</span> <span id="combined_r" class="font-extrabold text-xl ml-2 text-indigo-700"></span></p><button onclick="copyResult()" class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1 rounded text-sm hover:bg-indigo-100 transition" data-tr="Kopyala" data-en="Copy">Kopyala</button></div><p class="text-xs text-gray-500 mt-2"><span data-tr="Ortalama Z:" data-en="Avg Z:">Ortalama Z:</span> <span id="avg_z" class="font-mono"></span></p><div id="copy_message_area" class="text-xs text-center py-1 rounded mt-1 hidden bg-green-100 text-green-800"></div></div></div></div><div class="bg-white card rounded-xl p-6 mt-8"><div class="flex justify-between items-center mb-4 border-b pb-2"><h3 class="text-lg font-bold text-gray-800" data-tr="Geçmiş Kayıtlar" data-en="History">Geçmiş Kayıtlar</h3><button onclick="clearHistory()" id="clear_history_button" class="text-xs text-red-500 hover:text-red-700 font-medium hidden" data-tr="Geçmişi Sil" data-en="Clear History">Geçmişi Sil</button></div><div id="history_list" class="space-y-3"></div></div>
                 </div>
-                <!-- 1. VIEW SONU -->
 
-                <!-- PLACEHOLDER VIEWS FOR NEW TOOLS -->
                 <div id="view-effect-size" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">📊</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Etki Büyüklüğü</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                   <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Etki Büyüklüğü Hesaplayıcı" data-en="Effect Size Calculator">Etki Büyüklüğü Hesaplayıcı</h2><p class="text-gray-500" data-tr="İki grup arasındaki farkın büyüklüğünü (Cohen's d) hesaplayın." data-en="Calculate the magnitude of difference (Cohen's d) between two groups.">İki grup arasındaki farkın büyüklüğünü (Cohen's d) hesaplayın.</p></div><div class="bg-white card rounded-xl p-6 sm:p-10"><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="space-y-3 p-4 bg-gray-50 rounded-lg border"><h3 class="font-bold text-indigo-700" data-tr="1. Grup (Deney)" data-en="Group 1 (Experiment)">1. Grup (Deney)</h3><div><label class="text-xs text-gray-600 block mb-1">Ortalama (Mean)</label><input type="number" id="es_m1" class="w-full border rounded p-2" step="any"></div><div><label class="text-xs text-gray-600 block mb-1">Standart Sapma (SD)</label><input type="number" id="es_sd1" class="w-full border rounded p-2" step="any"></div><div><label class="text-xs text-gray-600 block mb-1">Örneklem (N)</label><input type="number" id="es_n1" class="w-full border rounded p-2" step="1"></div></div><div class="space-y-3 p-4 bg-gray-50 rounded-lg border"><h3 class="font-bold text-indigo-700" data-tr="2. Grup (Kontrol)" data-en="Group 2 (Control)">2. Grup (Kontrol)</h3><div><label class="text-xs text-gray-600 block mb-1">Ortalama (Mean)</label><input type="number" id="es_m2" class="w-full border rounded p-2" step="any"></div><div><label class="text-xs text-gray-600 block mb-1">Standart Sapma (SD)</label><input type="number" id="es_sd2" class="w-full border rounded p-2" step="any"></div><div><label class="text-xs text-gray-600 block mb-1">Örneklem (N)</label><input type="number" id="es_n2" class="w-full border rounded p-2" step="1"></div></div></div><div class="mt-6 flex justify-center"><button onclick="calculateEffectSize()" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 transition" data-tr="Hesapla" data-en="Calculate">Hesapla</button></div><div id="es_result_area" class="mt-6 p-4 border-2 border-dashed border-green-200 rounded-xl bg-green-50 hidden text-center"><p class="text-lg text-gray-700"><span class="font-bold">Cohen's d:</span> <span id="es_d_value" class="text-2xl font-extrabold text-green-700 ml-2"></span></p><p class="text-sm text-gray-600 mt-2"><span data-tr="Yorum:" data-en="Interpretation:">Yorum:</span> <span id="es_interpretation" class="font-bold text-indigo-600"></span></p></div></div>
                 </div>
+
                 <div id="view-sample-size" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">👥</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Örneklem Hesaplayıcı</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Örneklem Büyüklüğü Hesaplayıcı" data-en="Sample Size Calculator">Örneklem Büyüklüğü Hesaplayıcı</h2><p class="text-gray-500" data-tr="Bir araştırma için gerekli minimum örneklem sayısını hesaplayın." data-en="Calculate the minimum sample size required for a study.">Bir araştırma için gerekli minimum örneklem sayısını hesaplayın.</p></div><div class="bg-white card rounded-xl p-6 sm:p-10 max-w-2xl mx-auto"><div class="space-y-4"><div><label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Evren Büyüklüğü (N) - İsteğe Bağlı" data-en="Population Size (N) - Optional">Evren Büyüklüğü (N) - İsteğe Bağlı</label><input type="number" id="ss_pop" class="w-full border rounded p-2" placeholder="Sonsuz evren için boş bırakın" data-tr-placeholder="Sonsuz evren için boş bırakın" data-en-placeholder="Leave empty for infinite population"></div><div><label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Güven Aralığı (Confidence Level)" data-en="Confidence Level">Güven Aralığı (Confidence Level)</label><select id="ss_conf" class="w-full border rounded p-2 bg-white"><option value="1.96">95% (Standart)</option><option value="2.58">99%</option><option value="1.65">90%</option></select></div><div><label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Hata Payı (Margin of Error - %)" data-en="Margin of Error (%)">Hata Payı (%):</label><input type="number" id="ss_margin" class="w-full border rounded p-2" value="5" step="0.1"></div><button onclick="calculateSampleSize()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition" data-tr="Hesapla" data-en="Calculate">Hesapla</button></div><div id="ss_result_area" class="mt-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center hidden"><p class="text-gray-600 text-sm" data-tr="Gerekli Örneklem Büyüklüğü:" data-en="Required Sample Size:">Gerekli Örneklem Büyüklüğü:</p><p id="ss_result_value" class="text-4xl font-extrabold text-indigo-700 mt-1"></p></div></div>
                 </div>
+
                 <div id="view-normality" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🔔</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Normallik Testi</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Normallik Testi Yorumlayıcı" data-en="Normality Test Interpreter">Normallik Testi Yorumlayıcı</h2><p class="text-gray-500" data-tr="Çarpıklık ve Basıklık değerlerine göre dağılımın normalliğini test edin." data-en="Test distribution normality based on Skewness and Kurtosis values.">Çarpıklık ve Basıklık değerlerine göre dağılımın normalliğini test edin.</p></div><div class="bg-white card rounded-xl p-6 sm:p-10 max-w-2xl mx-auto"><div class="grid grid-cols-2 gap-4 mb-4"><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Çarpıklık (Skewness)" data-en="Skewness">Çarpıklık</label><input type="number" id="nt_skew" class="w-full border rounded p-2" step="any"></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Std. Hata (Skewness Error)" data-en="Std. Error">Std. Hata</label><input type="number" id="nt_skew_err" class="w-full border rounded p-2" step="any"></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Basıklık (Kurtosis)" data-en="Kurtosis">Basıklık</label><input type="number" id="nt_kurt" class="w-full border rounded p-2" step="any"></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Std. Hata (Kurtosis Error)" data-en="Std. Error">Std. Hata</label><input type="number" id="nt_kurt_err" class="w-full border rounded p-2" step="any"></div></div><button onclick="calculateNormality()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition" data-tr="Analiz Et" data-en="Analyze">Analiz Et</button><div id="nt_result_area" class="mt-6 hidden space-y-3"><div class="p-3 rounded border" id="nt_skew_res_box"><p class="text-sm font-bold"><span data-tr="Çarpıklık Z-Skoru:" data-en="Skewness Z-Score:">Çarpıklık Z-Skoru:</span> <span id="nt_skew_z"></span></p><p class="text-xs mt-1" id="nt_skew_comment"></p></div><div class="p-3 rounded border" id="nt_kurt_res_box"><p class="text-sm font-bold"><span data-tr="Basıklık Z-Skoru:" data-en="Kurtosis Z-Score:">Basıklık Z-Skoru:</span> <span id="nt_kurt_z"></span></p><p class="text-xs mt-1" id="nt_kurt_comment"></p></div><p class="text-xs text-gray-400 text-center mt-2 italic" data-tr="Kriter: Z değerinin -1.96 ile +1.96 arasında olması (p > .05)" data-en="Criteria: Z value between -1.96 and +1.96 (p > .05)">Kriter: Z değerinin -1.96 ile +1.96 arasında olması (p > .05)</p></div></div>
                 </div>
+
                 <div id="view-apa-generator" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">📝</div><h2 class="text-2xl font-bold text-gray-800 mb-2">APA 7 Oluşturucu</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="APA 7 Kaynakça Oluşturucu" data-en="APA 7 Citation Generator">APA 7 Kaynakça Oluşturucu</h2><p class="text-gray-500" data-tr="Kitap, makale ve web siteleri için hızlıca APA 7 formatında kaynakça oluşturun." data-en="Quickly create APA 7 formatted citations for books, articles, and websites.">Kitap, makale ve web siteleri için hızlıca APA 7 formatında kaynakça oluşturun.</p></div><div class="bg-white card rounded-xl p-6 sm:p-10 max-w-3xl mx-auto"><div class="flex justify-center space-x-2 mb-6"><button onclick="setApaType('book')" id="btn-apa-book" class="px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white transition">Kitap</button><button onclick="setApaType('article')" id="btn-apa-article" class="px-4 py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Makale</button><button onclick="setApaType('website')" id="btn-apa-website" class="px-4 py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Web Sitesi</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"><div class="col-span-1 md:col-span-2"><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Yazar Soyadı, Adının Baş Harfi (Örn: Yılmaz, A.)" data-en="Author Last Name, Initial (Ex: Smith, J.)">Yazar Soyadı, Adının Baş Harfi</label><input type="text" id="apa_author" class="w-full border rounded p-2" placeholder="Yılmaz, A."></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Yıl (Parantez içi)" data-en="Year">Yıl</label><input type="text" id="apa_year" class="w-full border rounded p-2" placeholder="2023"></div><div id="apa-field-title" class="col-span-1 md:col-span-2"><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Eser Başlığı" data-en="Title of Work">Eser Başlığı</label><input type="text" id="apa_title" class="w-full border rounded p-2" placeholder="Kitap veya Makale Adı"></div><div id="apa-group-book" class="col-span-1 md:col-span-2 apa-field"><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Yayınevi" data-en="Publisher">Yayınevi</label><input type="text" id="apa_publisher" class="w-full border rounded p-2" placeholder="Örn: Pegem Akademi"></div><div id="apa-group-article" class="col-span-1 md:col-span-2 apa-field hidden grid grid-cols-2 gap-4"><div class="col-span-2"><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Dergi Adı" data-en="Journal Name">Dergi Adı</label><input type="text" id="apa_journal" class="w-full border rounded p-2"></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Cilt (Volume)" data-en="Volume">Cilt</label><input type="text" id="apa_volume" class="w-full border rounded p-2"></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Sayı (Issue)" data-en="Issue">Sayı</label><input type="text" id="apa_issue" class="w-full border rounded p-2"></div><div><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Sayfa Aralığı" data-en="Page Range">Sayfa Aralığı</label><input type="text" id="apa_pages" class="w-full border rounded p-2" placeholder="123-145"></div><div><label class="block text-xs font-bold text-gray-600 mb-1">DOI / URL</label><input type="text" id="apa_doi" class="w-full border rounded p-2" placeholder="https://doi.org/..."></div></div><div id="apa-group-website" class="col-span-1 md:col-span-2 apa-field hidden"><div class="mb-4"><label class="block text-xs font-bold text-gray-600 mb-1" data-tr="Site Adı" data-en="Site Name">Site Adı</label><input type="text" id="apa_site_name" class="w-full border rounded p-2"></div><div><label class="block text-xs font-bold text-gray-600 mb-1">URL</label><input type="text" id="apa_url" class="w-full border rounded p-2"></div></div></div><button onclick="generateAPA()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition" data-tr="Oluştur" data-en="Generate">Oluştur</button><div id="apa_result_container" class="mt-6 hidden"><p class="text-xs text-gray-500 mb-1" data-tr="Sonuç (Kopyalamak için tıklayın):" data-en="Result (Click to copy):">Sonuç (Kopyalamak için tıklayın):</p><div onclick="copyApaResult()" class="p-4 bg-gray-50 border border-gray-300 rounded cursor-pointer hover:bg-gray-100 transition relative group"><p id="apa_result_text" class="text-gray-800 font-serif"></p><span class="absolute top-2 right-2 text-xs text-indigo-600 opacity-0 group-hover:opacity-100 transition" data-tr="Kopyala" data-en="Copy">Kopyala</span></div><div id="apa_copy_msg" class="text-center text-green-600 text-xs mt-1 hidden">Kopyalandı!</div></div></div>
                 </div>
+
                 <div id="view-abstract-checker" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🔡</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Özet Kontrolü</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Özet (Abstract) Kontrolcüsü" data-en="Abstract Checker">Özet (Abstract) Kontrolcüsü</h2><p class="text-gray-500" data-tr="Makale özetinizin kelime ve karakter sınırlarını anlık olarak kontrol edin." data-en="Check word and character limits of your abstract instantly.">Makale özetinizin kelime ve karakter sınırlarını anlık olarak kontrol edin.</p></div><div class="bg-white card rounded-xl p-6 sm:p-10 max-w-4xl mx-auto"><div class="relative"><textarea id="abstract_text" rows="10" class="w-full border rounded-lg p-4 text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Özet metnini buraya yapıştırın..." oninput="checkAbstract()"></textarea><div class="absolute bottom-4 right-4 text-xs text-gray-400"><span id="abs_word_count">0</span> <span data-tr="Kelime" data-en="Words">Kelime</span></div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6"><div class="bg-indigo-50 p-4 rounded-lg text-center border border-indigo-100"><div class="text-3xl font-bold text-indigo-600" id="stat_words">0</div><div class="text-xs text-indigo-400 font-bold uppercase tracking-wider" data-tr="Kelime Sayısı" data-en="Word Count">Kelime Sayısı</div></div><div class="bg-blue-50 p-4 rounded-lg text-center border border-blue-100"><div class="text-3xl font-bold text-blue-600" id="stat_chars">0</div><div class="text-xs text-blue-400 font-bold uppercase tracking-wider" data-tr="Karakter (Boşluklu)" data-en="Chars (with spaces)">Karakter (Boşluklu)</div></div><div class="bg-purple-50 p-4 rounded-lg text-center border border-purple-100"><div class="text-3xl font-bold text-purple-600" id="stat_sentences">0</div><div class="text-xs text-purple-400 font-bold uppercase tracking-wider" data-tr="Cümle Sayısı" data-en="Sentences">Cümle Sayısı</div></div></div><div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4"><div class="flex"><div class="ml-3"><p class="text-sm text-yellow-700"><span class="font-bold" data-tr="İpucu:" data-en="Tip:">İpucu:</span> <span data-tr="Genellikle özetler 150-250 kelime arasında olmalıdır. Dergi kurallarını kontrol ediniz." data-en="Abstracts are usually between 150-250 words. Check journal guidelines.">Genellikle özetler 150-250 kelime arasında olmalıdır. Dergi kurallarını kontrol ediniz.</span></p></div></div></div></div>
                 </div>
+
+                <!-- 7. VIEW: NITEL ARAŞTIRMA -->
+                <div id="view-qualitative" class="view-section hidden">
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Nitel Araştırma Tasarım Rehberi" data-en="Qualitative Research Design Guide">Nitel Araştırma Tasarım Rehberi</h2><p class="text-gray-500" data-tr="Araştırmanız için en uygun nitel deseni seçin ve detayları inceleyin." data-en="Choose the best qualitative design for your research and explore the details.">Araştırmanız için en uygun nitel deseni seçin ve detayları inceleyin.</p></div><div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8"><div onclick="showQualitativeDetail('phenomenology')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-phenomenology"><div class="text-3xl mb-2">🌟</div><div class="text-xs font-bold text-gray-700" data-tr="Fenomenoloji" data-en="Phenomenology">Fenomenoloji</div></div><div onclick="showQualitativeDetail('case-study')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-case-study"><div class="text-3xl mb-2">📦</div><div class="text-xs font-bold text-gray-700" data-tr="Durum Çalışması" data-en="Case Study">Durum Çalışması</div></div><div onclick="showQualitativeDetail('grounded-theory')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-grounded-theory"><div class="text-3xl mb-2">🌱</div><div class="text-xs font-bold text-gray-700" data-tr="Gömülü Teori" data-en="Grounded Theory">Gömülü Teori</div></div><div onclick="showQualitativeDetail('ethnography')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-ethnography"><div class="text-3xl mb-2">🌍</div><div class="text-xs font-bold text-gray-700" data-tr="Etnografi" data-en="Ethnography">Etnografi</div></div><div onclick="showQualitativeDetail('narrative')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-narrative"><div class="text-3xl mb-2">📖</div><div class="text-xs font-bold text-gray-700" data-tr="Anlatı" data-en="Narrative">Anlatı</div></div></div><div id="qual-detail-area" class="bg-white card rounded-xl p-6 sm:p-10 hidden"><div class="flex items-center gap-4 mb-6 pb-4 border-b"><div id="qual-icon" class="text-5xl"></div><div><h3 id="qual-title" class="text-2xl font-bold text-indigo-700"></h3><p id="qual-desc" class="text-gray-600 text-sm italic"></p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="space-y-6"><div class="bg-blue-50 p-4 rounded-lg border border-blue-100"><h4 class="font-bold text-blue-800 text-sm uppercase mb-2" data-tr="Önerilen Örneklem (Creswell)" data-en="Recommended Sample (Creswell)">Önerilen Örneklem (Creswell)</h4><p id="qual-sample" class="text-2xl font-extrabold text-blue-600"></p><p class="text-xs text-blue-500 mt-1" data-tr="Katılımcı Sayısı" data-en="Number of Participants">Katılımcı Sayısı</p></div><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Odak Noktası" data-en="Focus">Odak Noktası</h4><p id="qual-focus" class="text-sm text-gray-600"></p></div></div><div class="space-y-6"><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Veri Toplama Araçları" data-en="Data Collection Tools">Veri Toplama Araçları</h4><ul id="qual-methods" class="list-disc list-inside text-sm text-gray-600 space-y-1"></ul></div><div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100"><h4 class="font-bold text-yellow-800 text-sm mb-2" data-tr="Püf Noktası" data-en="Key Tip">Püf Noktası</h4><p id="qual-tip" class="text-sm text-yellow-700"></p></div></div></div></div><div id="qual-placeholder-msg" class="text-center py-12 text-gray-400"><div class="text-4xl mb-2">👆</div><p data-tr="Detayları görmek için yukarıdan bir desen seçin." data-en="Select a design above to see details.">Detayları görmek için yukarıdan bir desen seçin.</p></div>
+                </div>
+
+                <!-- 8. VIEW: NICEL ARAŞTIRMA -->
+                <div id="view-quantitative" class="view-section hidden">
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Nicel Araştırma Tasarım Rehberi" data-en="Quantitative Research Design Guide">Nicel Araştırma Tasarım Rehberi</h2><p class="text-gray-500" data-tr="İstatistiksel analiz gerektiren çalışmalarınız için desen seçin." data-en="Choose a design for studies requiring statistical analysis.">İstatistiksel analiz gerektiren çalışmalarınız için desen seçin.</p></div><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"><div onclick="showQuantitativeDetail('experimental')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-experimental"><div class="text-3xl mb-2">🧪</div><div class="text-xs font-bold text-gray-700" data-tr="Deneysel" data-en="Experimental">Deneysel</div></div><div onclick="showQuantitativeDetail('correlational')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-correlational"><div class="text-3xl mb-2">📈</div><div class="text-xs font-bold text-gray-700" data-tr="İlişkisel" data-en="Correlational">İlişkisel</div></div><div onclick="showQuantitativeDetail('survey')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-survey"><div class="text-3xl mb-2">📋</div><div class="text-xs font-bold text-gray-700" data-tr="Tarama (Survey)" data-en="Survey">Tarama (Survey)</div></div></div><div id="quant-detail-area" class="bg-white card rounded-xl p-6 sm:p-10 hidden"><div class="flex items-center gap-4 mb-6 pb-4 border-b"><div id="quant-icon" class="text-5xl"></div><div><h3 id="quant-title" class="text-2xl font-bold text-indigo-700"></h3><p id="quant-desc" class="text-gray-600 text-sm italic"></p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="space-y-6"><div class="bg-green-50 p-4 rounded-lg border border-green-100"><h4 class="font-bold text-green-800 text-sm uppercase mb-2" data-tr="Önerilen Örneklem" data-en="Recommended Sample">Önerilen Örneklem</h4><p id="quant-sample" class="text-xl font-bold text-green-600"></p></div><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Odak Noktası" data-en="Focus">Odak Noktası</h4><p id="quant-focus" class="text-sm text-gray-600"></p></div></div><div class="space-y-6"><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Yöntemler" data-en="Methods">Yöntemler</h4><ul id="quant-methods" class="list-disc list-inside text-sm text-gray-600 space-y-1"></ul></div><div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100"><h4 class="font-bold text-yellow-800 text-sm mb-2" data-tr="Püf Noktası" data-en="Key Tip">Püf Noktası</h4><p id="quant-tip" class="text-sm text-yellow-700"></p></div></div></div></div><div id="quant-placeholder-msg" class="text-center py-12 text-gray-400"><div class="text-4xl mb-2">👆</div><p data-tr="Detayları görmek için yukarıdan bir desen seçin." data-en="Select a design above to see details.">Detayları görmek için yukarıdan bir desen seçin.</p></div>
+                </div>
+
+                <!-- 9. VIEW: KARMA ARAŞTIRMA -->
+                <div id="view-mixed" class="view-section hidden">
+                    <div class="text-center mb-8"><h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Karma Araştırma Tasarım Rehberi" data-en="Mixed Research Design Guide">Karma Araştırma Tasarım Rehberi</h2><p class="text-gray-500" data-tr="Nitel ve nicel verilerin birlikte kullanıldığı desenleri keşfedin." data-en="Explore designs where qualitative and quantitative data are used together.">Nitel ve nicel verilerin birlikte kullanıldığı desenleri keşfedin.</p></div><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"><div onclick="showMixedDetail('convergent')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-convergent"><div class="text-3xl mb-2">🔀</div><div class="text-xs font-bold text-gray-700" data-tr="Yakınsayan Paralel" data-en="Convergent Parallel">Yakınsayan Paralel</div></div><div onclick="showMixedDetail('explanatory')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-explanatory"><div class="text-3xl mb-2">➡️</div><div class="text-xs font-bold text-gray-700" data-tr="Açıklayıcı Sıralı" data-en="Explanatory Sequential">Açıklayıcı Sıralı</div></div><div onclick="showMixedDetail('exploratory')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-exploratory"><div class="text-3xl mb-2">💡</div><div class="text-xs font-bold text-gray-700" data-tr="Keşfedici Sıralı" data-en="Exploratory Sequential">Keşfedici Sıralı</div></div></div><div id="mixed-detail-area" class="bg-white card rounded-xl p-6 sm:p-10 hidden"><div class="flex items-center gap-4 mb-6 pb-4 border-b"><div id="mixed-icon" class="text-5xl"></div><div><h3 id="mixed-title" class="text-2xl font-bold text-indigo-700"></h3><p id="mixed-desc" class="text-gray-600 text-sm italic"></p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="space-y-6"><div class="bg-purple-50 p-4 rounded-lg border border-purple-100"><h4 class="font-bold text-purple-800 text-sm uppercase mb-2" data-tr="Süreç" data-en="Process">Süreç</h4><p id="mixed-process" class="text-sm font-medium text-purple-700"></p></div><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Odak Noktası" data-en="Focus">Odak Noktası</h4><p id="mixed-focus" class="text-sm text-gray-600"></p></div></div><div class="space-y-6"><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Entegrasyon" data-en="Integration">Entegrasyon</h4><p id="mixed-integration" class="text-sm text-gray-600"></p></div><div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100"><h4 class="font-bold text-yellow-800 text-sm mb-2" data-tr="Püf Noktası" data-en="Key Tip">Püf Noktası</h4><p id="mixed-tip" class="text-sm text-yellow-700"></p></div></div></div></div><div id="mixed-placeholder-msg" class="text-center py-12 text-gray-400"><div class="text-4xl mb-2">👆</div><p data-tr="Detayları görmek için yukarıdan bir desen seçin." data-en="Select a design above to see details.">Detayları görmek için yukarıdan bir desen seçin.</p></div>
+                </div>
+
+                <!-- 10. VIEW: PRISMA SAYACI (YENİ EKLENDİ) -->
                 <div id="view-prisma" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">📉</div><h2 class="text-2xl font-bold text-gray-800 mb-2">PRISMA Sayacı</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="PRISMA Akış Şeması Sayacı" data-en="PRISMA Flow Diagram Counter">PRISMA Akış Şeması Sayacı</h2>
+                        <p class="text-gray-500" data-tr="Sistematik derleme ve meta-analiz için kayıt sayılarını takip edin." data-en="Track record numbers for systematic reviews and meta-analyses.">Sistematik derleme ve meta-analiz için kayıt sayılarını takip edin.</p>
+                    </div>
+                    <div class="bg-white card rounded-xl p-6 sm:p-10 max-w-4xl mx-auto">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                             <!-- Step 1: Identification -->
+                             <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                 <h4 class="font-bold text-blue-800 mb-3 text-sm uppercase">1. Tanımlama (Identification)</h4>
+                                 <div class="space-y-3">
+                                     <div>
+                                         <label class="block text-xs font-medium text-gray-600 mb-1">Veritabanlarından Gelen Kayıtlar</label>
+                                         <input type="number" id="prisma_db" class="w-full border rounded p-2 text-sm" placeholder="0" oninput="calculatePRISMA()">
+                                     </div>
+                                     <div>
+                                         <label class="block text-xs font-medium text-gray-600 mb-1">Diğer Kaynaklardan Gelen Kayıtlar</label>
+                                         <input type="number" id="prisma_other" class="w-full border rounded p-2 text-sm" placeholder="0" oninput="calculatePRISMA()">
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- Step 2: Screening -->
+                             <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                 <h4 class="font-bold text-yellow-800 mb-3 text-sm uppercase">2. Tarama (Screening)</h4>
+                                 <div class="space-y-3">
+                                     <div>
+                                         <label class="block text-xs font-medium text-gray-600 mb-1">Tekrar Eden (Duplicate) Kayıtlar</label>
+                                         <input type="number" id="prisma_duplicates" class="w-full border rounded p-2 text-sm" placeholder="0" oninput="calculatePRISMA()">
+                                     </div>
+                                     <div>
+                                         <label class="block text-xs font-medium text-gray-600 mb-1">Başlık/Özet Taramasında Elenenler</label>
+                                         <input type="number" id="prisma_screened_excluded" class="w-full border rounded p-2 text-sm" placeholder="0" oninput="calculatePRISMA()">
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- Step 3: Eligibility -->
+                             <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                                 <h4 class="font-bold text-orange-800 mb-3 text-sm uppercase">3. Uygunluk (Eligibility)</h4>
+                                 <div class="space-y-3">
+                                     <div>
+                                         <label class="block text-xs font-medium text-gray-600 mb-1">Ulaşılamayan Tam Metinler</label>
+                                         <input type="number" id="prisma_not_retrieved" class="w-full border rounded p-2 text-sm" placeholder="0" oninput="calculatePRISMA()">
+                                     </div>
+                                     <div>
+                                         <label class="block text-xs font-medium text-gray-600 mb-1">Tam Metin İncelemesinde Elenenler</label>
+                                         <input type="number" id="prisma_full_excluded" class="w-full border rounded p-2 text-sm" placeholder="0" oninput="calculatePRISMA()">
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- Step 4: Included -->
+                             <div class="bg-green-50 p-4 rounded-lg border border-green-200 flex flex-col justify-center items-center">
+                                 <h4 class="font-bold text-green-800 mb-3 text-sm uppercase">4. Dahil Edilen (Included)</h4>
+                                 <div class="text-center">
+                                     <p class="text-sm text-green-600 mb-1">Çalışmaya Dahil Edilenler</p>
+                                     <p id="prisma_final" class="text-5xl font-extrabold text-green-700">0</p>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <!-- Summary Text -->
+                         <div class="mt-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                             <h4 class="font-bold text-gray-700 text-xs uppercase mb-2">Otomatik Özet Metni</h4>
+                             <p id="prisma_summary" class="text-sm text-gray-600 italic">Veri girişi bekleniyor...</p>
+                         </div>
+                    </div>
                 </div>
+
+                <!-- 11. VIEW: PICO OLUŞTURUCU (YENİ EKLENDİ) -->
                 <div id="view-pico" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🧩</div><h2 class="text-2xl font-bold text-gray-800 mb-2">PICO Oluşturucu</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="PICO Soru Oluşturucu" data-en="PICO Question Generator">PICO Soru Oluşturucu</h2>
+                        <p class="text-gray-500" data-tr="Araştırma sorunuzu yapılandırmak için PICO bileşenlerini kullanın." data-en="Use PICO components to structure your research question.">Araştırma sorunuzu yapılandırmak için PICO bileşenlerini kullanın.</p>
+                    </div>
+                    <div class="bg-white card rounded-xl p-6 sm:p-10 max-w-3xl mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold text-indigo-600 mb-1">P - Population (Popülasyon)</label>
+                                <input type="text" id="pico_p" class="w-full border rounded p-3 focus:ring-2 focus:ring-indigo-500" placeholder="Örn: Tip 2 diyabetli hastalar">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-indigo-600 mb-1">I - Intervention (Müdahale)</label>
+                                <input type="text" id="pico_i" class="w-full border rounded p-3 focus:ring-2 focus:ring-indigo-500" placeholder="Örn: Düzenli egzersiz programı">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-indigo-600 mb-1">C - Comparison (Karşılaştırma)</label>
+                                <input type="text" id="pico_c" class="w-full border rounded p-3 focus:ring-2 focus:ring-indigo-500" placeholder="Örn: Standart bakım">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-indigo-600 mb-1">O - Outcome (Sonuç)</label>
+                                <input type="text" id="pico_o" class="w-full border rounded p-3 focus:ring-2 focus:ring-indigo-500" placeholder="Örn: Kan şekeri kontrolü">
+                            </div>
+                        </div>
+                        <button onclick="generatePICO()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition" data-tr="Soru Oluştur" data-en="Generate Question">Soru Oluştur</button>
+                        
+                        <div id="pico_result" class="mt-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg hidden">
+                            <p class="font-serif text-lg text-gray-800 text-center italic" id="pico_question"></p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- 12. VIEW: RASTGELE ATAMA (YENİ EKLENDİ) -->
                 <div id="view-randomizer" class="view-section hidden">
-                    <div class="bg-white card rounded-xl p-12 text-center"><div class="text-6xl mb-4">🎲</div><h2 class="text-2xl font-bold text-gray-800 mb-2">Rastgele Atama</h2><p class="text-gray-500">Bu araç hazırlanıyor...</p></div>
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Rastgele Atama Aracı" data-en="Random Assignment Tool">Rastgele Atama Aracı</h2>
+                        <p class="text-gray-500" data-tr="Katılımcıları gruplara yansız (random) olarak atayın." data-en="Randomly assign participants to groups.">Katılımcıları gruplara yansız (random) olarak atayın.</p>
+                    </div>
+                    <div class="bg-white card rounded-xl p-6 sm:p-10 max-w-2xl mx-auto">
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Toplam Katılımcı Sayısı (N)" data-en="Total Participants (N)">Toplam Katılımcı Sayısı (N)</label>
+                                <input type="number" id="rand_n" class="w-full border rounded p-2" placeholder="Örn: 60">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" data-tr="Grup İsimleri (Virgülle ayırın)" data-en="Group Names (Comma separated)">Grup İsimleri (Virgülle ayırın)</label>
+                                <input type="text" id="rand_groups" class="w-full border rounded p-2" placeholder="Deney, Kontrol, Plasebo">
+                            </div>
+                        </div>
+                        <button onclick="randomizeGroups()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition" data-tr="Ata" data-en="Assign">Ata</button>
+                        
+                        <div id="rand_result_area" class="mt-6 hidden">
+                            <h4 class="font-bold text-gray-700 mb-2" data-tr="Atama Listesi" data-en="Assignment List">Atama Listesi</h4>
+                            <div class="bg-gray-50 p-4 rounded border max-h-64 overflow-y-auto font-mono text-sm" id="rand_list"></div>
+                        </div>
+                    </div>
                 </div>
 
-
-                <!-- FOOTER SİLİNDİ (Çünkü Sidebar'a Taşındı) -->
+                <!-- 13. VIEW: SENTEZ ARAŞTIRMALARI (YENİ EKLENDİ) -->
+                <div id="view-synthesis" class="view-section hidden">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-gray-800 mb-2" data-tr="Sentez Araştırmaları Rehberi" data-en="Synthesis Research Guide">Sentez Araştırmaları Rehberi</h2>
+                        <p class="text-gray-500" data-tr="Mevcut araştırmaları birleştirerek yeni sonuçlara ulaşın." data-en="Combine existing research to reach new conclusions.">Mevcut araştırmaları birleştirerek yeni sonuçlara ulaşın.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div onclick="showSynthesisDetail('meta-analysis')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-meta-analysis"><div class="text-3xl mb-2">📊</div><div class="text-xs font-bold text-gray-700" data-tr="Meta-Analiz" data-en="Meta-Analysis">Meta-Analiz</div></div>
+                        <div onclick="showSynthesisDetail('meta-synthesis')" class="design-card bg-white p-4 rounded-xl text-center shadow-sm hover:shadow-md transition cursor-pointer border-2 border-transparent" id="card-meta-synthesis"><div class="text-3xl mb-2">🧶</div><div class="text-xs font-bold text-gray-700" data-tr="Meta-Sentez" data-en="Meta-Synthesis">Meta-Sentez</div></div>
+                    </div>
+                    <div id="synthesis-detail-area" class="bg-white card rounded-xl p-6 sm:p-10 hidden"><div class="flex items-center gap-4 mb-6 pb-4 border-b"><div id="synthesis-icon" class="text-5xl"></div><div><h3 id="synthesis-title" class="text-2xl font-bold text-indigo-700"></h3><p id="synthesis-desc" class="text-gray-600 text-sm italic"></p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="space-y-6"><div class="bg-teal-50 p-4 rounded-lg border border-teal-100"><h4 class="font-bold text-teal-800 text-sm uppercase mb-2" data-tr="Önerilen Çalışma Sayısı" data-en="Recommended Number of Studies">Önerilen Çalışma Sayısı</h4><p id="synthesis-sample" class="text-xl font-bold text-teal-600"></p></div><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Odak Noktası" data-en="Focus">Odak Noktası</h4><p id="synthesis-focus" class="text-sm text-gray-600"></p></div></div><div class="space-y-6"><div><h4 class="font-bold text-gray-700 mb-2" data-tr="Yöntemler" data-en="Methods">Yöntemler</h4><ul id="synthesis-methods" class="list-disc list-inside text-sm text-gray-600 space-y-1"></ul></div><div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100"><h4 class="font-bold text-yellow-800 text-sm mb-2" data-tr="Püf Noktası" data-en="Key Tip">Püf Noktası</h4><p id="synthesis-tip" class="text-sm text-yellow-700"></p></div></div></div></div><div id="synthesis-placeholder-msg" class="text-center py-12 text-gray-400"><div class="text-4xl mb-2">👆</div><p data-tr="Detayları görmek için yukarıdan bir desen seçin." data-en="Select a design above to see details.">Detayları görmek için yukarıdan bir desen seçin.</p></div>
+                </div>
 
             </div>
         </div>
@@ -292,24 +408,18 @@
     <script>
         // --- MULTI-APP NAVIGATION LOGIC ---
         function switchView(viewName) {
-            // Tüm viewleri gizle
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            
-            // Seçilen view'i göster
             const targetView = document.getElementById('view-' + viewName);
             if (targetView) targetView.classList.remove('hidden');
-
-            // Navigasyon stillerini güncelle
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const activeNav = document.getElementById('nav-' + viewName);
             if (activeNav) activeNav.classList.add('active');
         }
 
-        // --- EXISTING PEARSON LOGIC ---
+        // --- GLOBAL TRANSLATIONS & STATE ---
         const translations = {
             tr: {
                 title: "Akademik SuperApp",
-                // Sidebar Menu Items
                 "Pearson r Birleştirici": "Pearson r Birleştirici",
                 "Etki Büyüklüğü": "Etki Büyüklüğü",
                 "Örneklem Hesaplayıcı": "Örneklem Hesaplayıcı",
@@ -322,8 +432,13 @@
                 "Veri Analizi": "Veri Analizi",
                 "Yazım & Referans": "Yazım & Referans",
                 "Araştırma Süreci": "Araştırma Süreci",
-
-                // Pearson specific
+                "Araştırma Türleri": "Araştırma Türleri",
+                "Nitel Araştırma": "Nitel Araştırma",
+                "Nicel Araştırma": "Nicel Araştırma",
+                "Karma Araştırma": "Karma Araştırma",
+                "Sentez Çalışmaları": "Sentez Çalışmaları",
+                
+                // ... (Pearson Keys are preserved) ...
                 pearson_title: "Pearson r Birleştirici",
                 pearson_desc: "Fisher'ın Z Dönüşümü ile ağırlıklı ortalama korelasyon hesaplama aracı.",
                 sec_input: "Alt Boyut ve r Katsayısı",
@@ -360,11 +475,108 @@
                 msg_unlocked: "Kilit açıldı.",
                 msg_added: (t,n) => `Eklendi: ${t} (N=${n})`,
                 msg_removed: "Silindi.",
-                msg_cleared: "Temizlendi."
+                msg_cleared: "Temizlendi.",
+
+                // New Tools
+                "1. Grup (Deney)": "1. Grup (Deney)",
+                "2. Grup (Kontrol)": "2. Grup (Kontrol)",
+                "Hesapla": "Hesapla",
+                "Yorum:": "Yorum:",
+                "Evren Büyüklüğü (N) - İsteğe Bağlı": "Evren Büyüklüğü (N) - İsteğe Bağlı",
+                "Sonsuz evren için boş bırakın": "Sonsuz evren için boş bırakın",
+                "Güven Aralığı (Confidence Level)": "Güven Aralığı (Confidence Level)",
+                "Hata Payı (Margin of Error - %)": "Hata Payı (%)",
+                "Gerekli Örneklem Büyüklüğü:": "Gerekli Örneklem Büyüklüğü:",
+                "Normallik Testi Yorumlayıcı": "Normallik Testi Yorumlayıcı",
+                "Çarpıklık ve Basıklık değerlerine göre dağılımın normalliğini test edin.": "Çarpıklık ve Basıklık değerlerine göre dağılımın normalliğini test edin.",
+                "Çarpıklık (Skewness)": "Çarpıklık",
+                "Std. Hata (Skewness Error)": "Std. Hata",
+                "Basıklık (Kurtosis)": "Basıklık",
+                "Std. Hata (Kurtosis Error)": "Std. Hata",
+                "Analiz Et": "Analiz Et",
+                "Çarpıklık Z-Skoru:": "Çarpıklık Z-Skoru:",
+                "Basıklık Z-Skoru:": "Basıklık Z-Skoru:",
+                "Kriter: Z değerinin -1.96 ile +1.96 arasında olması (p > .05)": "Kriter: Z değerinin -1.96 ile +1.96 arasında olması (p > .05)",
+                "Dağılım Normal": "Dağılım Normal",
+                "Dağılım Normal Değil": "Dağılım Normal Değil",
+                "İhmal Edilebilir": "İhmal Edilebilir",
+                "Küçük Etki": "Küçük Etki",
+                "Orta Etki": "Orta Etki",
+                "Geniş Etki": "Geniş Etki",
+                "Çok Geniş Etki": "Çok Geniş Etki",
+                // APA
+                "APA 7 Kaynakça Oluşturucu": "APA 7 Kaynakça Oluşturucu",
+                "Kitap, makale ve web siteleri için hızlıca APA 7 formatında kaynakça oluşturun.": "Kitap, makale ve web siteleri için hızlıca APA 7 formatında kaynakça oluşturun.",
+                "Yazar Soyadı, Adının Baş Harfi (Örn: Yılmaz, A.)": "Yazar Soyadı, Adının Baş Harfi (Örn: Yılmaz, A.)",
+                "Yıl (Parantez içi)": "Yıl (Parantez içi)",
+                "Eser Başlığı": "Eser Başlığı",
+                "Yayınevi": "Yayınevi",
+                "Dergi Adı": "Dergi Adı",
+                "Cilt (Volume)": "Cilt (Volume)",
+                "Sayı (Issue)": "Sayı (Issue)",
+                "Sayfa Aralığı": "Sayfa Aralığı",
+                "Site Adı": "Site Adı",
+                "Oluştur": "Oluştur",
+                "Sonuç (Kopyalamak için tıklayın):": "Sonuç (Kopyalamak için tıklayın):",
+                "Kopyala": "Kopyala",
+                // Abstract
+                "Özet (Abstract) Kontrolcüsü": "Özet (Abstract) Kontrolcüsü",
+                "Makale özetinizin kelime ve karakter sınırlarını anlık olarak kontrol edin.": "Makale özetinizin kelime ve karakter sınırlarını anlık olarak kontrol edin.",
+                "Kelime": "Kelime",
+                "Kelime Sayısı": "Kelime Sayısı",
+                "Karakter (Boşluklu)": "Karakter (Boşluklu)",
+                "Cümle Sayısı": "Cümle Sayısı",
+                "İpucu:": "İpucu:",
+                "Genellikle özetler 150-250 kelime arasında olmalıdır. Dergi kurallarını kontrol ediniz.": "Genellikle özetler 150-250 kelime arasında olmalıdır. Dergi kurallarını kontrol ediniz.",
+                // Research Types
+                "Nitel Araştırma Tasarım Rehberi": "Nitel Araştırma Tasarım Rehberi",
+                "Araştırmanız için en uygun nitel deseni seçin ve detayları inceleyin.": "Araştırmanız için en uygun nitel deseni seçin ve detayları inceleyin.",
+                "Fenomenoloji": "Fenomenoloji",
+                "Durum Çalışması": "Durum Çalışması",
+                "Gömülü Teori": "Gömülü Teori",
+                "Etnografi": "Etnografi",
+                "Anlatı": "Anlatı",
+                "Önerilen Örneklem (Creswell)": "Önerilen Örneklem (Creswell)",
+                "Katılımcı Sayısı": "Katılımcı Sayısı",
+                "Odak Noktası": "Odak Noktası",
+                "Veri Toplama Araçları": "Veri Toplama Araçları",
+                "Püf Noktası": "Püf Noktası",
+                "Detayları görmek için yukarıdan bir desen seçin.": "Detayları görmek için yukarıdan bir desen seçin.",
+                "Nicel Araştırma Tasarım Rehberi": "Nicel Araştırma Tasarım Rehberi",
+                "İstatistiksel analiz gerektiren çalışmalarınız için desen seçin.": "İstatistiksel analiz gerektiren çalışmalarınız için desen seçin.",
+                "Deneysel": "Deneysel",
+                "İlişkisel": "İlişkisel",
+                "Tarama (Survey)": "Tarama (Survey)",
+                "Önerilen Örneklem": "Önerilen Örneklem",
+                "Yöntemler": "Yöntemler",
+                "Karma Araştırma Tasarım Rehberi": "Karma Araştırma Tasarım Rehberi",
+                "Nitel ve nicel verilerin birlikte kullanıldığı desenleri keşfedin.": "Nitel ve nicel verilerin birlikte kullanıldığı desenleri keşfedin.",
+                "Yakınsayan Paralel": "Yakınsayan Paralel",
+                "Açıklayıcı Sıralı": "Açıklayıcı Sıralı",
+                "Keşfedici Sıralı": "Keşfedici Sıralı",
+                "Süreç": "Süreç",
+                "Entegrasyon": "Entegrasyon",
+                "Sentez Araştırmaları Rehberi": "Sentez Araştırmaları Rehberi",
+                "Mevcut araştırmaları birleştirerek yeni sonuçlara ulaşın.": "Mevcut araştırmaları birleştirerek yeni sonuçlara ulaşın.",
+                "Meta-Analiz": "Meta-Analiz",
+                "Meta-Sentez": "Meta-Sentez",
+                "Önerilen Çalışma Sayısı": "Önerilen Çalışma Sayısı",
+                // Research Process (NEW)
+                "PRISMA Akış Şeması Sayacı": "PRISMA Akış Şeması Sayacı",
+                "Sistematik derleme ve meta-analiz için kayıt sayılarını takip edin.": "Sistematik derleme ve meta-analiz için kayıt sayılarını takip edin.",
+                "PICO Soru Oluşturucu": "PICO Soru Oluşturucu",
+                "Araştırma sorunuzu yapılandırmak için PICO bileşenlerini kullanın.": "Araştırma sorunuzu yapılandırmak için PICO bileşenlerini kullanın.",
+                "Rastgele Atama Aracı": "Rastgele Atama Aracı",
+                "Katılımcıları gruplara yansız (random) olarak atayın.": "Katılımcıları gruplara yansız (random) olarak atayın.",
+                "Soru Oluştur": "Soru Oluştur",
+                "Ata": "Assign",
+                "Atama Listesi": "Atama Listesi",
+                "Toplam Katılımcı Sayısı (N)": "Toplam Katılımcı Sayısı (N)",
+                "Grup İsimleri (Virgülle ayırın)": "Grup İsimleri (Virgülle ayırın)",
+                "Otomatik Özet Metni": "Otomatik Özet Metni"
             },
             en: {
                 title: "Academic SuperApp",
-                // Sidebar Menu Items
                 "Pearson r Combiner": "Pearson r Combiner",
                 "Effect Size Calculator": "Effect Size Calculator",
                 "Sample Size Calculator": "Sample Size Calculator",
@@ -377,8 +589,13 @@
                 "Data Analysis": "Data Analysis",
                 "Writing & Reference": "Writing & Reference",
                 "Research Process": "Research Process",
+                "Research Types": "Research Types",
+                "Qualitative Research": "Qualitative Research",
+                "Quantitative Research": "Quantitative Research",
+                "Mixed Research": "Mixed Research",
+                "Synthesis Studies": "Synthesis Studies",
 
-                // Pearson specific
+                // ... (Pearson Keys are preserved) ...
                 pearson_title: "Pearson r Combiner",
                 pearson_desc: "Weighted average correlation calculation tool using Fisher's Z-Transformation.",
                 sec_input: "Subscale & r Value",
@@ -415,14 +632,114 @@
                 msg_unlocked: "Unlocked.",
                 msg_added: (t,n) => `Added: ${t} (N=${n})`,
                 msg_removed: "Removed.",
-                msg_cleared: "Cleared."
+                msg_cleared: "Cleared.",
+
+                // New Tools
+                "1. Grup (Deney)": "Group 1 (Experiment)",
+                "2. Grup (Kontrol)": "Group 2 (Control)",
+                "Hesapla": "Calculate",
+                "Yorum:": "Interpretation:",
+                "Evren Büyüklüğü (N) - İsteğe Bağlı": "Population Size (N) - Optional",
+                "Sonsuz evren için boş bırakın": "Leave empty for infinite population",
+                "Güven Aralığı (Confidence Level)": "Confidence Level",
+                "Hata Payı (Margin of Error - %)": "Margin of Error (%)",
+                "Gerekli Örneklem Büyüklüğü:": "Required Sample Size:",
+                "Normallik Testi Yorumlayıcı": "Normality Test Interpreter",
+                "Çarpıklık ve Basıklık değerlerine göre dağılımın normalliğini test edin.": "Test distribution normality based on Skewness and Kurtosis values.",
+                "Çarpıklık (Skewness)": "Skewness",
+                "Std. Hata (Skewness Error)": "Std. Error",
+                "Basıklık (Kurtosis)": "Kurtosis",
+                "Std. Hata (Kurtosis Error)": "Std. Error",
+                "Analiz Et": "Analyze",
+                "Çarpıklık Z-Skoru:": "Skewness Z-Score:",
+                "Basıklık Z-Skoru:": "Kurtosis Z-Score:",
+                "Kriter: Z değerinin -1.96 ile +1.96 arasında olması (p > .05)": "Criteria: Z value between -1.96 and +1.96 (p > .05)",
+                "Dağılım Normal": "Normal Distribution",
+                "Dağılım Normal Değil": "Not Normal Distribution",
+                "İhmal Edilebilir": "Negligible",
+                "Küçük Etki": "Small Effect",
+                "Orta Etki": "Medium Effect",
+                "Geniş Etki": "Large Effect",
+                "Çok Geniş Etki": "Very Large Effect",
+                // APA
+                "APA 7 Kaynakça Oluşturucu": "APA 7 Citation Generator",
+                "Kitap, makale ve web siteleri için hızlıca APA 7 formatında kaynakça oluşturun.": "Quickly create APA 7 formatted citations for books, articles, and websites.",
+                "Yazar Soyadı, Adının Baş Harfi (Örn: Yılmaz, A.)": "Author Last Name, Initial (Ex: Smith, J.)",
+                "Yıl (Parantez içi)": "Year",
+                "Eser Başlığı": "Title of Work",
+                "Yayınevi": "Publisher",
+                "Dergi Adı": "Journal Name",
+                "Cilt (Volume)": "Volume",
+                "Sayı (Issue)": "Issue",
+                "Sayfa Aralığı": "Page Range",
+                "Site Adı": "Site Name",
+                "Oluştur": "Generate",
+                "Sonuç (Kopyalamak için tıklayın):": "Result (Click to copy):",
+                "Kopyala": "Copy",
+                // Abstract
+                "Özet (Abstract) Kontrolcüsü": "Abstract Checker",
+                "Makale özetinizin kelime ve karakter sınırlarını anlık olarak kontrol edin.": "Check word and character limits of your abstract instantly.",
+                "Kelime": "Words",
+                "Kelime Sayısı": "Word Count",
+                "Karakter (Boşluklu)": "Chars (with spaces)",
+                "Cümle Sayısı": "Sentences",
+                "İpucu:": "Tip:",
+                "Genellikle özetler 150-250 kelime arasında olmalıdır. Dergi kurallarını kontrol ediniz.": "Abstracts are usually between 150-250 words. Check journal guidelines.",
+                // Research Types
+                "Qualitative Research Design Guide": "Qualitative Research Design Guide",
+                "Choose the best qualitative design for your research and explore the details.": "Choose the best qualitative design for your research and explore the details.",
+                "Phenomenology": "Phenomenology",
+                "Case Study": "Case Study",
+                "Grounded Theory": "Grounded Theory",
+                "Ethnography": "Ethnography",
+                "Narrative": "Narrative",
+                "Recommended Sample (Creswell)": "Recommended Sample (Creswell)",
+                "Number of Participants": "Number of Participants",
+                "Focus": "Focus",
+                "Data Collection Tools": "Data Collection Tools",
+                "Key Tip": "Key Tip",
+                "Select a design above to see details.": "Select a design above to see details.",
+                "Quantitative Research Design Guide": "Quantitative Research Design Guide",
+                "Choose a design for studies requiring statistical analysis.": "Choose a design for studies requiring statistical analysis.",
+                "Experimental": "Experimental",
+                "Correlational": "Correlational",
+                "Survey": "Survey",
+                "Recommended Sample": "Recommended Sample",
+                "Methods": "Methods",
+                "Mixed Research Design Guide": "Mixed Research Design Guide",
+                "Explore designs where qualitative and quantitative data are used together.": "Explore designs where qualitative and quantitative data are used together.",
+                "Convergent Parallel": "Convergent Parallel",
+                "Explanatory Sequential": "Explanatory Sequential",
+                "Exploratory Sequential": "Exploratory Sequential",
+                "Process": "Process",
+                "Integration": "Integration",
+                "Synthesis Research Guide": "Synthesis Research Guide",
+                "Combine existing research to reach new conclusions.": "Combine existing research to reach new conclusions.",
+                "Meta-Analysis": "Meta-Analysis",
+                "Meta-Synthesis": "Meta-Synthesis",
+                "Recommended Number of Studies": "Recommended Number of Studies",
+                // Research Process (NEW)
+                "PRISMA Flow Diagram Counter": "PRISMA Flow Diagram Counter",
+                "Track record numbers for systematic reviews and meta-analyses.": "Track record numbers for systematic reviews and meta-analyses.",
+                "PICO Question Generator": "PICO Question Generator",
+                "Use PICO components to structure your research question.": "Use PICO components to structure your research question.",
+                "Random Assignment Tool": "Random Assignment Tool",
+                "Randomly assign participants to groups.": "Randomly assign participants to groups.",
+                "Generate Question": "Generate Question",
+                "Assign": "Assign",
+                "Assignment List": "Assignment List",
+                "Total Participants (N)": "Total Participants (N)",
+                "Group Names (Comma separated)": "Group Names (Comma separated)",
+                "Otomatik Özet Metni": "Automatic Summary Text"
             }
         };
 
+        // --- GLOBAL VARIABLES ---
         let currentLang = 'tr';
         let correlationData = [];
         let isNLocked = false;
         let lockedNValue = null;
+        let currentApaType = 'book';
         const HISTORY_KEY = 'pearson_r_history';
 
         // Elements
@@ -444,49 +761,197 @@
             langEn: document.getElementById('lang-en')
         };
 
+        // Qualitative Data Object
+        const qualitativeData = {
+            'phenomenology': {
+                icon: '🌟',
+                title: { tr: 'Fenomenoloji', en: 'Phenomenology' },
+                desc: { tr: 'Bireylerin bir olguya (fenomen) ilişkin yaşanmış deneyimlerini anlamaya odaklanır.', en: 'Focuses on understanding the lived experiences of individuals regarding a phenomenon.' },
+                sample: '5 - 25',
+                focus: { tr: 'Ortak bir deneyimin özü.', en: 'The essence of a shared experience.' },
+                methods: { tr: ['Derinlemesine Görüşme', 'Günlükler', 'Sanat Eserleri'], en: ['In-depth Interviews', 'Diaries', 'Artworks'] },
+                tip: { tr: 'Katılımcıların o deneyimi bizzat yaşamış olması şarttır.', en: 'Participants must have personally experienced the phenomenon.' }
+            },
+            'case-study': {
+                icon: '📦',
+                title: { tr: 'Durum Çalışması', en: 'Case Study' },
+                desc: { tr: 'Sınırlı bir sistemin (bir olay, program, aktivite) zaman içinde derinlemesine incelenmesidir.', en: 'In-depth study of a bounded system (event, program, activity) over time.' },
+                sample: { tr: '4 - 5 Durum (veya tek durum)', en: '4 - 5 Cases (or single case)' },
+                focus: { tr: 'Durumun detaylı betimlenmesi.', en: 'Detailed description of the case.' },
+                methods: { tr: ['Gözlem', 'Görüşme', 'Doküman Analizi', 'Görsel Materyaller'], en: ['Observation', 'Interviews', 'Document Analysis', 'Visual Materials'] },
+                tip: { tr: 'Veri çeşitlemesi (triangulation) güvenirlik için çok önemlidir.', en: 'Data triangulation is crucial for reliability.' }
+            },
+            'grounded-theory': {
+                icon: '🌱',
+                title: { tr: 'Gömülü Teori', en: 'Grounded Theory' },
+                desc: { tr: 'Verilerden yola çıkarak bir süreç, eylem veya etkileşim hakkında genel bir teori oluşturmayı amaçlar.', en: 'Aims to generate a general theory about a process, action, or interaction from data.' },
+                sample: '20 - 60',
+                focus: { tr: 'Teori üretimi veya geliştirilmesi.', en: 'Theory generation or development.' },
+                methods: { tr: ['Görüşme (Odaklı)', 'Sürekli Karşılaştırmalı Analiz'], en: ['Interviews (Focused)', 'Constant Comparative Analysis'] },
+                tip: { tr: 'Veri doygunluğuna (saturation) ulaşmak esastır.', en: 'Reaching data saturation is essential.' }
+            },
+            'ethnography': {
+                icon: '🌍',
+                title: { tr: 'Etnografi', en: 'Ethnography' },
+                desc: { tr: 'Bir kültür paylaşan grubun davranışlarını, dilini ve etkileşimlerini doğal ortamında inceler.', en: 'Examines the behavior, language, and interactions of a culture-sharing group in their natural setting.' },
+                sample: { tr: 'Tüm kültür grubu', en: 'Entire culture group' },
+                focus: { tr: 'Kültürel örüntüler ve anlamlar.', en: 'Cultural patterns and meanings.' },
+                methods: { tr: ['Katılımcı Gözlem', 'Saha Notları', 'Görüşme'], en: ['Participant Observation', 'Field Notes', 'Interviews'] },
+                tip: { tr: 'Uzun süreli saha çalışması gerektirir.', en: 'Requires long-term fieldwork.' }
+            },
+            'narrative': {
+                icon: '📖',
+                title: { tr: 'Anlatı', en: 'Narrative' },
+                desc: { tr: 'Bireylerin hayat hikayelerini ve deneyimlerini kronolojik bir anlatıyla keşfeder.', en: 'Explores individuals\' life stories and experiences through a chronological narrative.' },
+                sample: '1 - 2',
+                focus: { tr: 'Bireysel hikayeler ve yaşamlar.', en: 'Individual stories and lives.' },
+                methods: { tr: ['Görüşme', 'Dokümanlar', 'Mektuplar', 'Fotoğraflar'], en: ['Interviews', 'Documents', 'Letters', 'Photos'] },
+                tip: { tr: 'Hikayenin kronolojik olarak yeniden yapılandırılması önemlidir.', en: 'Restorying (chronological reconstruction) is important.' }
+            }
+        };
+
+        // Quantitative Data Object
+        const quantitativeData = {
+            'experimental': {
+                icon: '🧪',
+                title: { tr: 'Deneysel', en: 'Experimental' },
+                desc: { tr: 'Değişkenler arasındaki neden-sonuç ilişkilerini test eder.', en: 'Tests cause-and-effect relationships between variables.' },
+                sample: { tr: 'G*Power Analizi ile belirlenmeli', en: 'Determine via G*Power Analysis' },
+                focus: { tr: 'Nedensellik ve Kontrol.', en: 'Causality and Control.' },
+                methods: { tr: ['Ön Test / Son Test', 'Kontrol Grupları', 'Rastgele Atama'], en: ['Pre/Post Tests', 'Control Groups', 'Random Assignment'] },
+                tip: { tr: 'İç geçerliliği tehdit eden faktörleri kontrol etmek hayati önem taşır.', en: 'Controlling threats to internal validity is vital.' }
+            },
+            'correlational': {
+                icon: '📈',
+                title: { tr: 'İlişkisel', en: 'Correlational' },
+                desc: { tr: 'İki veya daha fazla değişken arasındaki ilişkiyi inceler (nedensellik yok).', en: 'Examines relationship between two or more variables (no causality).' },
+                sample: { tr: 'Min N > 30 (Genelde N > 50+h)', en: 'Min N > 30 (Usually N > 50+k)' },
+                focus: { tr: 'İlişki (Korelasyon) veya Yordama (Regresyon).', en: 'Association (Correlation) or Prediction (Regression).' },
+                methods: { tr: ['Ölçekler', 'Arşiv Verileri', 'Anketler'], en: ['Scales', 'Archival Data', 'Surveys'] },
+                tip: { tr: 'Korelasyon nedensellik (causation) anlamına gelmez!', en: 'Correlation does not imply causation!' }
+            },
+            'survey': {
+                icon: '📋',
+                title: { tr: 'Tarama (Survey)', en: 'Survey' },
+                desc: { tr: 'Bir evrenin özelliklerini, tutumlarını veya görüşlerini betimler.', en: 'Describes characteristics, attitudes, or opinions of a population.' },
+                sample: { tr: 'Evreni Temsil Etmeli (büyük N)', en: 'Representative of population (large N)' },
+                focus: { tr: 'Genellenebilirlik ve Betimleme.', en: 'Generalizability and Description.' },
+                methods: { tr: ['Anketler', 'Yapılandırılmış Görüşmeler'], en: ['Questionnaires', 'Structured Interviews'] },
+                tip: { tr: 'Geri dönüş oranı (response rate) ve örnekleme hatası kritiktir.', en: 'Response rate and sampling error are critical.' }
+            }
+        };
+
+        // Mixed Data Object
+        const mixedData = {
+            'convergent': {
+                icon: '🔀',
+                title: { tr: 'Yakınsayan Paralel', en: 'Convergent Parallel' },
+                desc: { tr: 'Nitel ve nicel veriler aynı anda toplanır, analiz edilir ve sonuçlar karşılaştırılır.', en: 'Qual and quant data collected concurrently, analyzed, and results compared.' },
+                process: { tr: 'Nitel + Nicel -> Karşılaştırma/Yorum', en: 'Qual + Quant -> Compare/Interpret' },
+                focus: { tr: 'Sonuçların birbirini doğrulayıp doğrulamadığı (Corroboration).', en: 'Whether results corroborate each other.' },
+                integration: { tr: 'Veri analizi ve yorum aşamasında birleştirilir.', en: 'Merged during data analysis and interpretation.' },
+                tip: { tr: 'Verilerin eşit ağırlıkta olması idealdir.', en: 'Ideally, data strands have equal weight.' }
+            },
+            'explanatory': {
+                icon: '➡️',
+                title: { tr: 'Açıklayıcı Sıralı', en: 'Explanatory Sequential' },
+                desc: { tr: 'Önce nicel veri toplanır, ardından nicel sonuçları açıklamak için nitel veri toplanır.', en: 'Quant data collected first, followed by qual data to explain quant results.' },
+                process: { tr: 'Nicel -> Nitel -> Yorum', en: 'Quant -> Qual -> Interpret' },
+                focus: { tr: 'Nicel sonuçların derinlemesine açıklanması.', en: 'In-depth explanation of quantitative results.' },
+                integration: { tr: 'Nitel veriler, nicel sonuçlara bağlanır.', en: 'Qualitative data connects to quantitative results.' },
+                tip: { tr: 'Katılımcılar genellikle aynı gruptan seçilir.', en: 'Participants are usually selected from the same group.' }
+            },
+            'exploratory': {
+                icon: '💡',
+                title: { tr: 'Keşfedici Sıralı', en: 'Exploratory Sequential' },
+                desc: { tr: 'Önce nitel veri toplanır (keşif), ardından bulguları genellemek için nicel veri toplanır.', en: 'Qual data collected first (explore), followed by quant data to generalize.' },
+                process: { tr: 'Nitel -> Nicel -> Yorum', en: 'Qual -> Quant -> Interpret' },
+                focus: { tr: 'Bir olguyu keşfetme ve ölçme aracı geliştirme.', en: 'Exploring a phenomenon and instrument development.' },
+                integration: { tr: 'Nitel bulgular nicel araca/değişkenlere dönüşür.', en: 'Qual findings inform quant instrument/variables.' },
+                tip: { tr: 'Ölçek geliştirme çalışmaları için en uygun desendir.', en: 'Best design for scale development studies.' }
+            }
+        };
+
+        // Synthesis Data Object
+        const synthesisData = {
+            'meta-analysis': {
+                icon: '📊',
+                title: { tr: 'Meta-Analiz', en: 'Meta-Analysis' },
+                desc: { tr: 'Birden fazla nicel çalışmanın istatistiksel sonuçlarını birleştirerek genel bir etki büyüklüğü hesaplar.', en: 'Combines statistical results from multiple quantitative studies to calculate an overall effect size.' },
+                sample: { tr: 'Çalışma Sayısı (k > 5-10)', en: 'Number of Studies (k > 5-10)' },
+                focus: { tr: 'Genel etki büyüklüğü ve homojenlik.', en: 'Overall effect size and homogeneity.' },
+                methods: { tr: ['Forest Plot', 'Funnel Plot', 'Moderatör Analizi'], en: ['Forest Plot', 'Funnel Plot', 'Moderator Analysis'] },
+                tip: { tr: 'Yayın yanlığına (Publication Bias) dikkat edilmelidir.', en: 'Publication bias must be considered.' }
+            },
+            'meta-synthesis': {
+                icon: '🧶',
+                title: { tr: 'Meta-Sentez', en: 'Meta-Synthesis' },
+                desc: { tr: 'Nitel çalışmaların bulgularını yorumlayıcı bir yaklaşımla birleştirerek yeni ve daha derin bir anlayış oluşturur.', en: 'Integrates findings from qualitative studies interpretively to create new and deeper understanding.' },
+                sample: { tr: '10 - 50 Çalışma', en: '10 - 50 Studies' },
+                focus: { tr: 'Temaların bütünleştirilmesi ve yorumlanması.', en: 'Integration and interpretation of themes.' },
+                methods: { tr: ['Tematik Sentez', 'Meta-etnografi'], en: ['Thematic Synthesis', 'Meta-ethnography'] },
+                tip: { tr: 'Sadece bulguları özetlemek değil, yeniden yorumlamak gerekir.', en: 'Requires re-interpretation, not just summarizing findings.' }
+            }
+        };
+
         // --- INIT ---
         window.onload = function() {
             const savedLang = localStorage.getItem('appLang');
             setLanguage(savedLang || 'tr', false);
             
-            // URL Yükleme Kontrolü
             const urlLoaded = loadFromUrl();
             if(!urlLoaded) {
-                renderHistoryList(getHistory()); // FIXED: loadHistory yerine getHistory ve render
-                el.rScoreInput.value = '0.';
+                renderHistoryList(getHistory());
+                if(el.rScoreInput) el.rScoreInput.value = '0.';
             }
         };
 
+        // --- LANGUAGE & URL LOGIC ---
         function setLanguage(lang, save=true) {
             if(!translations[lang]) return;
             currentLang = lang;
             document.documentElement.lang = lang;
 
-            // DOM Text Update
             document.querySelectorAll('[data-tr]').forEach(item => {
                 const keyTR = item.getAttribute('data-tr');
                 const keyEN = item.getAttribute('data-en');
-                item.innerHTML = (lang === 'tr' ? keyTR : keyEN)
-                    .replace('(r)', '<span class="symbol">r</span>')
-                    .replace('(n)', '<span class="symbol">n</span>')
-                    .replace('(Z̄)', '<span class="symbol">Z̄</span>');
+                if(translations[lang][keyTR]) {
+                     item.innerHTML = translations[lang][keyTR].replace('(r)', '<span class="symbol">r</span>').replace('(n)', '<span class="symbol">n</span>').replace('(Z̄)', '<span class="symbol">Z̄</span>');
+                } else {
+                     item.innerHTML = (lang === 'tr' ? keyTR : keyEN).replace('(r)', '<span class="symbol">r</span>').replace('(n)', '<span class="symbol">n</span>').replace('(Z̄)', '<span class="symbol">Z̄</span>');
+                }
             });
 
-            // Placeholders
             document.querySelectorAll('[data-tr-placeholder]').forEach(item => {
-                item.placeholder = lang === 'tr' ? item.getAttribute('data-tr-placeholder') : item.getAttribute('data-en-placeholder');
+                const key = item.getAttribute('data-tr-placeholder');
+                if(translations[lang][key]) item.placeholder = translations[lang][key];
+                else item.placeholder = lang === 'tr' ? item.getAttribute('data-tr-placeholder') : item.getAttribute('data-en-placeholder');
             });
 
-            // Button Styles
-            el.langTr.className = lang === 'tr' ? "text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors" : "text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors";
-            el.langEn.className = lang === 'en' ? "text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors" : "text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors";
-
-            // Update Lock Button Text
-            updateLockBtnText();
+            if(el.langTr) {
+                el.langTr.className = lang === 'tr' ? "text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors" : "text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors";
+                el.langEn.className = lang === 'en' ? "text-xs font-bold px-3 py-1.5 rounded-md border border-indigo-600 text-white bg-indigo-600 transition-colors" : "text-xs font-bold px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition-colors";
+            }
+            if (isNLocked && el.nLockButton) {
+                el.nLockButton.textContent = (lang === 'tr' ? 'Kilitli' : 'Locked') + ` (N=${lockedNValue})`;
+            }
 
             if(save) localStorage.setItem('appLang', lang);
-            renderDataList();
             renderHistoryList(getHistory());
+            renderDataList();
+            
+            // Re-render open detail views
+            let activeCard = document.querySelector('#view-qualitative .qual-card.selected');
+            if(activeCard) showQualitativeDetail(activeCard.id.replace('card-', ''));
+            
+            activeCard = document.querySelector('#view-quantitative .design-card.selected');
+            if(activeCard) showQuantitativeDetail(activeCard.id.replace('card-', ''));
+            
+            activeCard = document.querySelector('#view-mixed .design-card.selected');
+            if(activeCard) showMixedDetail(activeCard.id.replace('card-', ''));
+            
+            activeCard = document.querySelector('#view-synthesis .design-card.selected');
+            if(activeCard) showSynthesisDetail(activeCard.id.replace('card-', ''));
         }
 
         function loadFromUrl() {
@@ -502,7 +967,6 @@
                         correlationData = parsed;
                         renderDataList();
                         calculateCombinedR(true);
-                        // Clean URL without refresh
                         const baseUrl = window.location.href.split('?')[0];
                         window.history.replaceState(null, null, baseUrl);
                         showMessage(translations[currentLang].msg_url_loaded, 'bg-indigo-100 text-indigo-700');
@@ -513,7 +977,180 @@
             return false;
         }
 
-        // --- CORE LOGIC ---
+        // --- RESEARCH DESIGN FUNCTIONS ---
+        function showQualitativeDetail(type) {
+            const data = qualitativeData[type];
+            if (!data) return;
+            document.querySelectorAll('#view-qualitative .qual-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById('card-' + type).classList.add('selected');
+            document.getElementById('qual-placeholder-msg').classList.add('hidden');
+            document.getElementById('qual-detail-area').classList.remove('hidden');
+            const lang = currentLang;
+            document.getElementById('qual-icon').textContent = data.icon;
+            document.getElementById('qual-title').textContent = data.title[lang];
+            document.getElementById('qual-desc').textContent = data.desc[lang];
+            document.getElementById('qual-sample').textContent = typeof data.sample === 'object' ? data.sample[lang] : data.sample;
+            document.getElementById('qual-focus').textContent = data.focus[lang];
+            document.getElementById('qual-tip').textContent = data.tip[lang];
+            const methodsList = document.getElementById('qual-methods');
+            methodsList.innerHTML = '';
+            data.methods[lang].forEach(m => { const li = document.createElement('li'); li.textContent = m; methodsList.appendChild(li); });
+        }
+
+        function showQuantitativeDetail(type) {
+            const data = quantitativeData[type];
+            if (!data) return;
+            document.querySelectorAll('#view-quantitative .design-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById('card-' + type).classList.add('selected');
+            document.getElementById('quant-placeholder-msg').classList.add('hidden');
+            document.getElementById('quant-detail-area').classList.remove('hidden');
+            const lang = currentLang;
+            document.getElementById('quant-icon').textContent = data.icon;
+            document.getElementById('quant-title').textContent = data.title[lang];
+            document.getElementById('quant-desc').textContent = data.desc[lang];
+            document.getElementById('quant-sample').textContent = data.sample[lang];
+            document.getElementById('quant-focus').textContent = data.focus[lang];
+            document.getElementById('quant-tip').textContent = data.tip[lang];
+            const methodsList = document.getElementById('quant-methods');
+            methodsList.innerHTML = '';
+            data.methods[lang].forEach(m => { const li = document.createElement('li'); li.textContent = m; methodsList.appendChild(li); });
+        }
+
+        function showMixedDetail(type) {
+            const data = mixedData[type];
+            if (!data) return;
+            document.querySelectorAll('#view-mixed .design-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById('card-' + type).classList.add('selected');
+            document.getElementById('mixed-placeholder-msg').classList.add('hidden');
+            document.getElementById('mixed-detail-area').classList.remove('hidden');
+            const lang = currentLang;
+            document.getElementById('mixed-icon').textContent = data.icon;
+            document.getElementById('mixed-title').textContent = data.title[lang];
+            document.getElementById('mixed-desc').textContent = data.desc[lang];
+            document.getElementById('mixed-process').textContent = data.process[lang];
+            document.getElementById('mixed-focus').textContent = data.focus[lang];
+            document.getElementById('mixed-integration').textContent = data.integration[lang];
+            document.getElementById('mixed-tip').textContent = data.tip[lang];
+        }
+
+        function showSynthesisDetail(type) {
+            const data = synthesisData[type];
+            if (!data) return;
+            document.querySelectorAll('#view-synthesis .design-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById('card-' + type).classList.add('selected');
+            document.getElementById('synthesis-placeholder-msg').classList.add('hidden');
+            document.getElementById('synthesis-detail-area').classList.remove('hidden');
+            const lang = currentLang;
+            document.getElementById('synthesis-icon').textContent = data.icon;
+            document.getElementById('synthesis-title').textContent = data.title[lang];
+            document.getElementById('synthesis-desc').textContent = data.desc[lang];
+            document.getElementById('synthesis-sample').textContent = data.sample[lang];
+            document.getElementById('synthesis-focus').textContent = data.focus[lang];
+            document.getElementById('synthesis-tip').textContent = data.tip[lang];
+            const methodsList = document.getElementById('synthesis-methods');
+            methodsList.innerHTML = '';
+            data.methods[lang].forEach(m => { const li = document.createElement('li'); li.textContent = m; methodsList.appendChild(li); });
+        }
+
+        // --- PRISMA COUNTER LOGIC ---
+        function calculatePRISMA() {
+            // Get Inputs
+            const db = parseInt(document.getElementById('prisma_db').value) || 0;
+            const other = parseInt(document.getElementById('prisma_other').value) || 0;
+            const duplicates = parseInt(document.getElementById('prisma_duplicates').value) || 0;
+            const screened_excluded = parseInt(document.getElementById('prisma_screened_excluded').value) || 0;
+            const not_retrieved = parseInt(document.getElementById('prisma_not_retrieved').value) || 0;
+            const full_excluded = parseInt(document.getElementById('prisma_full_excluded').value) || 0;
+
+            // Calculations
+            const identification = db + other;
+            const after_duplicates = identification - duplicates;
+            const screened = after_duplicates;
+            const sought_for_retrieval = screened - screened_excluded;
+            const assessed_for_eligibility = sought_for_retrieval - not_retrieved;
+            const included = assessed_for_eligibility - full_excluded;
+
+            // Update UI
+            document.getElementById('prisma_final').textContent = included;
+            
+            // Generate Summary Text
+            const lang = currentLang;
+            let summary = "";
+            if(lang === 'tr') {
+                summary = `PRISMA akış şemasına göre toplam ${identification} kayıt tanımlanmıştır (${db} veritabanı, ${other} diğer). ${duplicates} tekrar eden kayıt çıkarıldıktan sonra ${screened} kayıt taranmıştır. Başlık ve özet incelemesi sonucu ${screened_excluded} kayıt elenmiştir. Kalan ${sought_for_retrieval} kayıttan ${not_retrieved} tanesine ulaşılamamış, ${assessed_for_eligibility} tam metin uygunluk açısından değerlendirilmiştir. ${full_excluded} makale kriterleri karşılamadığı için elenmiş ve toplam ${included} çalışma analize dahil edilmiştir.`;
+            } else {
+                summary = `A total of ${identification} records were identified (${db} database, ${other} other). After removing ${duplicates} duplicates, ${screened} records were screened. ${screened_excluded} records were excluded based on title and abstract. Of the remaining ${sought_for_retrieval}, ${not_retrieved} were not retrieved. ${assessed_for_eligibility} full-text articles were assessed for eligibility. ${full_excluded} were excluded, resulting in ${included} studies included in the analysis.`;
+            }
+            document.getElementById('prisma_summary').textContent = summary;
+        }
+
+        // --- PICO GENERATOR LOGIC ---
+        function generatePICO() {
+            const p = document.getElementById('pico_p').value.trim();
+            const i = document.getElementById('pico_i').value.trim();
+            const c = document.getElementById('pico_c').value.trim();
+            const o = document.getElementById('pico_o').value.trim();
+            const resBox = document.getElementById('pico_result');
+            const qBox = document.getElementById('pico_question');
+
+            if (!p || !i || !o) {
+                alert(currentLang === 'tr' ? "Lütfen en az P, I ve O alanlarını doldurun." : "Please fill at least P, I, and O fields.");
+                return;
+            }
+
+            let question = "";
+            if (currentLang === 'tr') {
+                question = `${p} grubunda, ${c ? c + ' ile karşılaştırıldığında ' : ''}${i} uygulamasının ${o} üzerindeki etkisi nedir?`;
+            } else {
+                question = `In ${p}, how does ${i} affect ${o}${c ? ' compared to ' + c : ''}?`;
+            }
+
+            qBox.textContent = question;
+            resBox.classList.remove('hidden');
+        }
+
+        // --- RANDOMIZER LOGIC ---
+        function randomizeGroups() {
+            const n = parseInt(document.getElementById('rand_n').value);
+            const groupsStr = document.getElementById('rand_groups').value.trim();
+            
+            if (!n || !groupsStr) {
+                alert("Lütfen katılımcı sayısını ve grupları giriniz.");
+                return;
+            }
+
+            const groups = groupsStr.split(',').map(g => g.trim()).filter(g => g);
+            if (groups.length < 2) {
+                alert("En az 2 grup girmelisiniz.");
+                return;
+            }
+
+            // Create assignment array
+            let assignments = [];
+            // Balanced randomization logic (block randomization simplified)
+            // Ensure equal distribution if possible
+            const perGroup = Math.ceil(n / groups.length);
+            for (let g of groups) {
+                for (let i = 0; i < perGroup; i++) {
+                    assignments.push(g);
+                }
+            }
+            // Trim excess if any (simple approach) or strict cut
+            assignments = assignments.slice(0, n);
+            
+            // Shuffle (Fisher-Yates)
+            for (let i = assignments.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [assignments[i], assignments[j]] = [assignments[j], assignments[i]];
+            }
+
+            // Display
+            const listDiv = document.getElementById('rand_list');
+            listDiv.innerHTML = assignments.map((g, i) => `<div>${i+1}. Katılımcı -> <strong>${g}</strong></div>`).join('');
+            document.getElementById('rand_result_area').classList.remove('hidden');
+        }
+
+        // --- TOOL 1: PEARSON LOGIC (EXISTING) ---
         function toggleNLock() {
             if(!isNLocked) {
                 const val = parseInt(el.nSizeInput.value, 10);
@@ -536,60 +1173,39 @@
                 el.nLockButton.classList.remove('hover:bg-indigo-700');
                 showMessage(translations[currentLang].msg_unlocked, 'bg-yellow-100 text-yellow-700');
             }
-            updateLockBtnText();
-        }
-
-        function updateLockBtnText() {
-            const t = translations[currentLang];
-            if(isNLocked) {
-                el.nLockButton.textContent = (currentLang === 'tr' ? 'Kilitli' : 'Locked') + ` (N=${lockedNValue})`;
+            // Update Text
+            const lang = currentLang;
+            if (isNLocked) {
+                el.nLockButton.textContent = (lang === 'tr' ? 'Kilitli' : 'Locked') + ` (N=${lockedNValue})`;
             } else {
-                el.nLockButton.textContent = t.btn_lock;
+                el.nLockButton.textContent = translations[lang].btn_lock;
             }
         }
 
-        function handleKeydown(e) {
-            if(e.key === 'Enter') addEntry();
-        }
+        function handleKeydown(e) { if(e.key === 'Enter') addEntry(); }
 
         function addEntry() {
-            const t = translations[currentLang];
             const title = el.titleInput.value.trim();
             const r = parseFloat(el.rScoreInput.value);
             let n = isNLocked ? lockedNValue : parseInt(el.nSizeInput.value, 10);
 
-            // Validation
-            let valid = true;
-            if(!title) { document.getElementById('title_error').classList.remove('hidden'); valid = false; }
-            else document.getElementById('title_error').classList.add('hidden');
-
-            if(isNaN(r) || r < -1 || r > 1) { document.getElementById('r_error').classList.remove('hidden'); valid = false; }
-            else document.getElementById('r_error').classList.add('hidden');
-
-            if(isNaN(n) || n < 3) { 
-                if(!isNLocked) document.getElementById('n_error').classList.remove('hidden'); 
-                valid = false; 
-            } else document.getElementById('n_error').classList.add('hidden');
-
-            if(!valid) {
+            if(!title || isNaN(r) || r < -1 || r > 1 || isNaN(n) || n < 3) {
                 showMessage(currentLang === 'tr' ? 'Lütfen alanları kontrol edin.' : 'Please check fields.', 'bg-red-100 text-red-700');
                 return;
             }
 
             correlationData.push({ title, r, n });
-            
-            // Reset Inputs
             el.titleInput.value = '';
             el.rScoreInput.value = '0.';
             if(!isNLocked) el.nSizeInput.value = '';
             el.titleInput.focus();
-
             renderDataList();
-            showMessage(t.msg_added(title, n), 'bg-green-100 text-green-800');
+            showMessage(translations[currentLang].msg_added(title, n), 'bg-green-100 text-green-800');
             el.calcBtn.disabled = correlationData.length < 2;
         }
 
         function renderDataList() {
+            if(!el.dataList) return;
             el.dataList.innerHTML = '';
             if(correlationData.length === 0) {
                 el.dataList.innerHTML = `<p class="text-gray-400 italic text-sm text-center py-8">${translations[currentLang].ph_list_empty}</p>`;
@@ -597,19 +1213,10 @@
                 el.calcBtn.disabled = true;
                 return;
             }
-
             correlationData.forEach((d, i) => {
                 const div = document.createElement('div');
                 div.className = 'flex justify-between items-center bg-white p-3 rounded border border-gray-200 mb-2 last:mb-0';
-                div.innerHTML = `
-                    <div class="truncate pr-2">
-                        <span class="font-bold text-gray-800 block truncate">${d.title}</span>
-                        <span class="text-xs text-gray-500">r=${d.r}, n=${d.n}</span>
-                    </div>
-                    <button onclick="removeEntry(${i})" class="text-red-500 hover:text-red-700 text-sm font-semibold px-2 py-1 bg-red-50 rounded hover:bg-red-100 transition">
-                        ${currentLang === 'tr' ? 'Sil' : 'Del'}
-                    </button>
-                `;
+                div.innerHTML = `<div class="truncate pr-2"><span class="font-bold text-gray-800 block truncate">${d.title}</span><span class="text-xs text-gray-500">r=${d.r}, n=${d.n}</span></div><button onclick="removeEntry(${i})" class="text-red-500 hover:text-red-700 text-sm font-semibold px-2 py-1 bg-red-50 rounded hover:bg-red-100 transition">${currentLang === 'tr' ? 'Sil' : 'Del'}</button>`;
                 el.dataList.appendChild(div);
             });
         }
@@ -634,42 +1241,30 @@
 
         function calculateCombinedR(skipHistory=false) {
             if(correlationData.length < 2) return;
-
             let sumWeightedZ = 0;
             let sumWeights = 0;
-
             correlationData.forEach(d => {
                 const z = 0.5 * Math.log((1 + d.r) / (1 - d.r));
                 const w = d.n - 3;
                 sumWeightedZ += w * z;
                 sumWeights += w;
             });
-
             const avgZ = sumWeightedZ / sumWeights;
             const combinedR = (Math.exp(2 * avgZ) - 1) / (Math.exp(2 * avgZ) + 1);
-
             el.combinedRText.textContent = combinedR.toFixed(3);
             el.avgZText.textContent = avgZ.toFixed(4);
             el.resultsArea.classList.remove('hidden');
-
-            if(!skipHistory) {
-                const entry = {
-                    ts: Date.now(),
-                    res: combinedR,
-                    data: correlationData.map(x => ({...x}))
-                };
-                saveHistory(entry);
-            }
+            if(!skipHistory) saveHistory({ ts: Date.now(), res: combinedR, data: correlationData.map(x => ({...x})) });
         }
 
         function showMessage(msg, classes) {
+            if(!el.msgArea) return;
             el.msgArea.textContent = msg;
             el.msgArea.className = `text-sm text-center py-2 rounded-lg mb-2 ${classes}`;
             el.msgArea.classList.remove('hidden');
             setTimeout(() => el.msgArea.classList.add('hidden'), 3000);
         }
 
-        // --- RESULTS COPY ---
         function copyResult() {
             const txt = el.combinedRText.textContent;
             navigator.clipboard.writeText(txt).then(() => {
@@ -679,24 +1274,19 @@
             });
         }
 
-        // --- HISTORY ---
-        function getHistory() {
-            return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-        }
-
+        function getHistory() { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
         function saveHistory(entry) {
             const h = getHistory();
             h.unshift(entry);
             localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 10)));
             renderHistoryList(getHistory());
         }
-
         function clearHistory() {
             localStorage.removeItem(HISTORY_KEY);
             renderHistoryList([]);
         }
-
         function renderHistoryList(list) {
+            if(!el.histList) return;
             el.histList.innerHTML = '';
             if(list.length === 0) {
                 el.histList.innerHTML = `<p class="text-gray-400 text-sm text-center italic py-2">${translations[currentLang].ph_history}</p>`;
@@ -704,56 +1294,206 @@
                 return;
             }
             el.clearHistBtn.classList.remove('hidden');
-
             list.forEach((item, idx) => {
                 const date = new Date(item.ts).toLocaleDateString(currentLang==='tr'?'tr-TR':'en-US', {hour:'2-digit', minute:'2-digit'});
                 const div = document.createElement('div');
                 div.className = 'bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm hover:bg-gray-100 transition';
-                div.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-semibold text-gray-700">${date}</span>
-                        <span class="font-bold text-green-600">r = ${item.res.toFixed(3)}</span>
-                    </div>
-                    <div class="text-xs text-gray-500 mb-2 truncate">
-                        ${item.data.length} ${currentLang==='tr'?'alt boyut':'subscales'}: ${item.data.map(d=>d.title).join(', ')}
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="restoreHistory(${idx})" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium bg-indigo-50 px-2 py-1 rounded">
-                            ${translations[currentLang].btn_load}
-                        </button>
-                        <button onclick="shareHistory(${idx})" class="text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1 rounded relative share-btn">
-                            ${translations[currentLang].btn_share}
-                        </button>
-                    </div>
-                `;
+                div.innerHTML = `<div class="flex justify-between items-center mb-1"><span class="font-semibold text-gray-700">${date}</span><span class="font-bold text-green-600">r = ${item.res.toFixed(3)}</span></div><div class="text-xs text-gray-500 mb-2 truncate">${item.data.length} ${currentLang==='tr'?'alt boyut':'subscales'}: ${item.data.map(d=>d.title).join(', ')}</div><div class="flex gap-2"><button onclick="restoreHistory(${idx})" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium bg-indigo-50 px-2 py-1 rounded">${translations[currentLang].btn_load}</button><button onclick="shareHistory(${idx})" class="text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1 rounded relative share-btn">${translations[currentLang].btn_share}</button></div>`;
                 el.histList.appendChild(div);
             });
         }
-
         function restoreHistory(idx) {
             const h = getHistory();
-            if(h[idx]) {
-                correlationData = h[idx].data.map(x=>({...x})); // deep copy ish
-                renderDataList();
-                calculateCombinedR(true);
-            }
+            if(h[idx]) { correlationData = h[idx].data.map(x=>({...x})); renderDataList(); calculateCombinedR(true); }
         }
-
         function shareHistory(idx) {
             const h = getHistory();
             const entry = h[idx];
             if(!entry) return;
-
             const json = JSON.stringify(entry.data);
             const url = `${window.location.origin}${window.location.pathname}?data=${encodeURIComponent(json)}&lang=${currentLang}`;
-            
             navigator.clipboard.writeText(url).then(() => {
-                // Show tooltip feedback on button
                 const btn = event.target.closest('.share-btn');
                 const originalText = btn.textContent;
                 btn.textContent = translations[currentLang].msg_copied;
                 setTimeout(() => btn.textContent = originalText, 1500);
             });
+        }
+
+        // --- NEW TOOLS FUNCTIONS ---
+
+        // 1. Effect Size
+        function calculateEffectSize() {
+            const m1 = parseFloat(document.getElementById('es_m1').value);
+            const sd1 = parseFloat(document.getElementById('es_sd1').value);
+            const n1 = parseFloat(document.getElementById('es_n1').value);
+            const m2 = parseFloat(document.getElementById('es_m2').value);
+            const sd2 = parseFloat(document.getElementById('es_sd2').value);
+            const n2 = parseFloat(document.getElementById('es_n2').value);
+
+            if ([m1, sd1, n1, m2, sd2, n2].some(isNaN)) {
+                alert(currentLang === 'tr' ? "Lütfen tüm değerleri giriniz." : "Please enter all values.");
+                return;
+            }
+
+            const pooledSD = Math.sqrt(((n1 - 1) * sd1 ** 2 + (n2 - 1) * sd2 ** 2) / (n1 + n2 - 2));
+            const d = (m1 - m2) / pooledSD;
+            
+            const absD = Math.abs(d);
+            let interpretation = "";
+            if (absD < 0.2) interpretation = translations[currentLang]["İhmal Edilebilir"];
+            else if (absD < 0.5) interpretation = translations[currentLang]["Küçük Etki"];
+            else if (absD < 0.8) interpretation = translations[currentLang]["Orta Etki"];
+            else if (absD < 1.2) interpretation = translations[currentLang]["Geniş Etki"];
+            else interpretation = translations[currentLang]["Çok Geniş Etki"];
+
+            document.getElementById('es_d_value').textContent = d.toFixed(3);
+            document.getElementById('es_interpretation').textContent = interpretation;
+            document.getElementById('es_result_area').classList.remove('hidden');
+        }
+
+        // 2. Sample Size
+        function calculateSampleSize() {
+            const pop = parseFloat(document.getElementById('ss_pop').value);
+            const z = parseFloat(document.getElementById('ss_conf').value);
+            const margin = parseFloat(document.getElementById('ss_margin').value) / 100;
+            const p = 0.5;
+
+            if (isNaN(z) || isNaN(margin) || margin <= 0) {
+                alert("Geçersiz giriş.");
+                return;
+            }
+
+            let n0 = (z ** 2 * p * (1 - p)) / (margin ** 2);
+
+            if (pop && pop > 0) {
+                n0 = n0 / (1 + ((n0 - 1) / pop));
+            }
+
+            document.getElementById('ss_result_value').textContent = Math.ceil(n0);
+            document.getElementById('ss_result_area').classList.remove('hidden');
+        }
+
+        // 3. Normality Test
+        function calculateNormality() {
+            const skew = parseFloat(document.getElementById('nt_skew').value);
+            const skewErr = parseFloat(document.getElementById('nt_skew_err').value);
+            const kurt = parseFloat(document.getElementById('nt_kurt').value);
+            const kurtErr = parseFloat(document.getElementById('nt_kurt_err').value);
+
+            if ([skew, skewErr, kurt, kurtErr].some(isNaN)) {
+                alert("Lütfen tüm alanları doldurun.");
+                return;
+            }
+
+            const zSkew = skew / skewErr;
+            const zKurt = kurt / kurtErr;
+
+            const isSkewNormal = Math.abs(zSkew) < 1.96;
+            const isKurtNormal = Math.abs(zKurt) < 1.96;
+
+            const tNormal = translations[currentLang]["Dağılım Normal"];
+            const tNotNormal = translations[currentLang]["Dağılım Normal Değil"];
+
+            document.getElementById('nt_skew_z').textContent = zSkew.toFixed(3);
+            const skewBox = document.getElementById('nt_skew_res_box');
+            skewBox.className = isSkewNormal ? "p-3 rounded border bg-green-50 border-green-200" : "p-3 rounded border bg-red-50 border-red-200";
+            document.getElementById('nt_skew_comment').textContent = isSkewNormal ? `✅ ${tNormal}` : `❌ ${tNotNormal}`;
+
+            document.getElementById('nt_kurt_z').textContent = zKurt.toFixed(3);
+            const kurtBox = document.getElementById('nt_kurt_res_box');
+            kurtBox.className = isKurtNormal ? "p-3 rounded border bg-green-50 border-green-200" : "p-3 rounded border bg-red-50 border-red-200";
+            document.getElementById('nt_kurt_comment').textContent = isKurtNormal ? `✅ ${tNormal}` : `❌ ${tNotNormal}`;
+
+            document.getElementById('nt_result_area').classList.remove('hidden');
+        }
+
+        // 4. APA GENERATOR
+        function setApaType(type) {
+            currentApaType = type;
+            document.getElementById('btn-apa-book').className = type === 'book' ? "px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white transition" : "px-4 py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition";
+            document.getElementById('btn-apa-article').className = type === 'article' ? "px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white transition" : "px-4 py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition";
+            document.getElementById('btn-apa-website').className = type === 'website' ? "px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white transition" : "px-4 py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition";
+
+            const fields = {
+                book: ['apa-group-book'],
+                article: ['apa-group-article'],
+                website: ['apa-group-website']
+            };
+
+            // Hide all specific groups
+            document.getElementById('apa-group-book').classList.add('hidden');
+            document.getElementById('apa-group-article').classList.add('hidden');
+            document.getElementById('apa-group-website').classList.add('hidden');
+
+            // Show selected
+            fields[type].forEach(id => document.getElementById(id).classList.remove('hidden'));
+        }
+
+        function generateAPA() {
+            const author = document.getElementById('apa_author').value.trim();
+            const year = document.getElementById('apa_year').value.trim();
+            const title = document.getElementById('apa_title').value.trim();
+            let result = "";
+
+            if (currentApaType === 'book') {
+                const publisher = document.getElementById('apa_publisher').value.trim();
+                // Author, A. A. (Year). *Title*. Publisher.
+                result = `${author} (${year}). <i>${title}</i>. ${publisher}.`;
+            } else if (currentApaType === 'article') {
+                const journal = document.getElementById('apa_journal').value.trim();
+                const volume = document.getElementById('apa_volume').value.trim();
+                const issue = document.getElementById('apa_issue').value.trim();
+                const pages = document.getElementById('apa_pages').value.trim();
+                const doi = document.getElementById('apa_doi').value.trim();
+                // Author, A. A. (Year). Title. *Journal, Volume*(Issue), Pages. DOI
+                result = `${author} (${year}). ${title}. <i>${journal}, ${volume}</i>(${issue}), ${pages}. ${doi}`;
+            } else if (currentApaType === 'website') {
+                const siteName = document.getElementById('apa_site_name').value.trim();
+                const url = document.getElementById('apa_url').value.trim();
+                // Author, A. A. (Year). *Title*. Site Name. URL
+                result = `${author} (${year}). <i>${title}</i>. ${siteName}. ${url}`;
+            }
+
+            document.getElementById('apa_result_text').innerHTML = result;
+            document.getElementById('apa_result_container').classList.remove('hidden');
+        }
+
+        function copyApaResult() {
+            const text = document.getElementById('apa_result_text').innerText; // Use innerText to get plain text? No, innerHTML for italics formatting might be needed but clipboard usually plain.
+            // Actually, copying HTML to clipboard is tricky. Let's stick to text or use a range.
+            // For academic purposes, rich text copy is better.
+            
+            const element = document.getElementById('apa_result_text');
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                const msg = document.getElementById('apa_copy_msg');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 2000);
+            } catch(e) {
+                alert("Kopyalama başarısız.");
+            }
+            selection.removeAllRanges();
+        }
+
+        // 5. ABSTRACT CHECKER
+        function checkAbstract() {
+            const text = document.getElementById('abstract_text').value;
+            const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            const charCount = text.length;
+            // Simple sentence estimation (dots, exclamations, questions)
+            const sentenceCount = text.split(/[.!?]+/).filter(Boolean).length;
+
+            document.getElementById('abs_word_count').textContent = wordCount;
+            document.getElementById('stat_words').textContent = wordCount;
+            document.getElementById('stat_chars').textContent = charCount;
+            document.getElementById('stat_sentences').textContent = sentenceCount;
         }
 
     </script>
